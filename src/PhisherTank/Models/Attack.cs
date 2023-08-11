@@ -21,5 +21,4 @@ internal abstract class Attack
             Timeout = TimeSpan.FromSeconds(5)
         };
     }
-
 }
