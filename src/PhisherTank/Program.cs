@@ -10,7 +10,7 @@ namespace ConsoleApp1
         private static void Main()
         {
             CancellationTokenSource cts = new();
-            var threads = CreateAttackThreads<MicrosotfAttack>(cts.Token, 1).ToArray();
+            var threads = CreateAttackThreads<BancatlanAttack>(cts.Token, 1).ToArray();
             Console.CancelKeyPress += (_, __) =>
             {
                 Console.WriteLine("Stopping...");

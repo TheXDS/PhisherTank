@@ -13,7 +13,8 @@ Because of the bespoke nature of some of these sites, attacks must be tailored a
 As of right now, there's two phishing sites supported.
 
 - PHP.Berangkat
-- PHP.Microsotf.A (note the mispelling, there was another simmilar site with slight differences, but the site went down and silly me... I deleted the whole attack, but still. This is variant A)
+- PHP.liveblog365.A (Microsotf) (note the mispelling, there was another simmilar site with slight differences, but the site went down and silly me... I deleted the whole attack, but still. This is variant A)
+- PHP.liveblog365.B (Bancatlan) (slightly more advanced, pretends to be a Honduran Bank, includes some advanced telemetry libary to presumably, keep track of resources downloaded by victims)
 
 I came up with these names sort-of the same way an anti-virus company would come with theirs.
 

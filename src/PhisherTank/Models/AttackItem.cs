@@ -11,9 +11,14 @@ internal class AttackItem
 
     public Func<FauxData, IEnumerable<(string key, string value)>>? FormItems { get; init; }
 
-    private FormUrlEncodedContent? GetForm(FauxData context)
+    public Func<FauxData, string>? PlainData { get; init; }
+
+    private HttpContent? GetContent(FauxData context)
     {
-        return FormItems?.Invoke(context) is { } frm ? MakeForm(frm) : null;
+        return FormItems?.Invoke(context) is { } frm
+            ? MakeForm(frm)
+            : PlainData?.Invoke(context) is { } plainContent
+            ? new StringContent(plainContent) : null;
     }
 
     private static FormUrlEncodedContent MakeForm(IEnumerable<(string key, string value)> values)
@@ -23,7 +28,7 @@ internal class AttackItem
     
     public HttpRequestMessage NewRequest(FauxData data)
     {
-        var content = GetForm(data);
+        var content = GetContent(data);
         return new HttpRequestMessage(content is null ? HttpMethod.Get : HttpMethod.Post, Route)
         {
             Content = content
