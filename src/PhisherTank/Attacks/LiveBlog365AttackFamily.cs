@@ -41,7 +41,7 @@ internal abstract class LiveBlog365AttackFamily : Attack
         return Regex.Match(input, $"{variable}{"=toNumbers\\(\"([0-9a-f]{32})\"\\)"}").Groups[1].Value;
     }
 
-    protected static void AddCookie(IAttackContext context)
+    protected static void GetCookie(IAttackContext context)
     {
         if (!(context.LastResponse is { } r)) return;
         using var gz = new GZipStream(r.Content.ReadAsStream(), CompressionMode.Decompress);

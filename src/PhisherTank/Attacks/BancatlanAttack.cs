@@ -12,7 +12,7 @@ internal class BancatlanAttack : LiveBlog365AttackFamily
     {
         context.AddCommonBrowserHeaders();
         yield return new("");
-        AddCookie(context);
+        GetCookie(context);
         context.AddReferrer();
         yield return new("?i=1");
         context.AddReferrer();

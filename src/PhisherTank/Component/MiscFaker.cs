@@ -33,4 +33,16 @@ internal class MiscFaker
     {
         return $"{FakeUsername(person)}@{(fakeDomains ??= LoadDomains()).Pick()}";
     }
+
+    public static string FakePin(int length = 4)
+    {
+        var sb = new StringBuilder();
+        sb.Append(_rnd.Next(1, 10));
+        while (length > 1)
+        {
+            sb.Append(_rnd.Next(0, 10));
+            length--;
+        }
+        return sb.ToString();
+    }
 }

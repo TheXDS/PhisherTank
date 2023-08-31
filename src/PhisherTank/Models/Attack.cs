@@ -21,4 +21,13 @@ internal abstract class Attack
             Timeout = TimeSpan.FromSeconds(5)
         };
     }
+
+
+    protected static void AddCookie(IAttackContext context)
+    {
+        if (context.LastResponse is { Headers: { } h } && h.TryGetValues("Set-Cookie", out var values))
+        {
+            context.Headers.Add("Cookie", values.ToArray()[0].Split(';')[0]);
+        }
+    }
 }

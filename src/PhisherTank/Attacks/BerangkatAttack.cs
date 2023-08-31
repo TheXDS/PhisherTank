@@ -68,14 +68,6 @@ internal class BerangkatAttack : Attack
         };
     }
 
-    private static void AddCookie(IAttackContext context)
-    {
-        if (context.LastResponse is { Headers: { } h } && h.TryGetValues("Set-Cookie", out var values))
-        {
-            context.Headers.Add("Cookie", values.ToArray()[0].Split(';')[0]);
-        }
-    }
-
     private static IEnumerable<(string key, string value)> GetCCardForm(FauxData f)
     {
         var issuer = new[]

@@ -10,7 +10,7 @@ namespace ConsoleApp1
         private static void Main()
         {
             CancellationTokenSource cts = new();
-            var threads = CreateAttackThreads<Serviciosonline202323Attack>(cts.Token, 1).ToArray();
+            var threads = CreateAttackThreads<DrexmHostAttack>(cts.Token, 1).ToArray();
             Console.CancelKeyPress += (_, __) =>
             {
                 Console.WriteLine("Stopping...");
@@ -97,10 +97,7 @@ namespace ConsoleApp1
             }
             else
             {
-                counter.Failure(
-                    context.LastResponse?.ReasonPhrase ??
-                    context.LastResponse?.StatusCode.ToString() ??
-                    "Invalid attack.");
+                counter.Failure($"{context.LastResponse?.ReasonPhrase ?? context.LastResponse?.StatusCode.ToString() ?? "Invalid attack"} on {context.LastResponse?.RequestMessage?.RequestUri?.ToString() ?? "<Unknown>"}");
                 Thread.Sleep(2000);
             }
         }
