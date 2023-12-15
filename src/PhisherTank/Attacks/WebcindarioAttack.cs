@@ -7,7 +7,9 @@ internal class WebcindarioAttack : Attack
 {
     public WebcindarioAttack() : base("outlooklivehn.webcindario.com")
     {
+        MiscFaker.SetDomains("hotmail.com", "hotmail.com", "outlook.com", "hotmail.es", "hotmail.com");
     }
+
     public override IEnumerable<AttackItem> GetAttacks(IAttackContext context)
     {
         context.AddCommonBrowserHeaders();

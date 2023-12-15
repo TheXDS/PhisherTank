@@ -18,6 +18,11 @@ internal class MiscFaker
     private static string[]? resolutions;
     private static Dictionary<string, string[]>? usRegions;
 
+    public static void SetDomains(params string[] domains)
+    {
+        fakeDomains = domains;
+    }
+
     private static string[] LoadDomains()
     {
         return new[] { "hotmail.com", "hotmail.com", "live.com", "hotmail.com", "hotmail.com", "hotmail.es", "hotmail.com", "gmail.com", "gmail.com", "gmail.com", "gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "yahoo.com", "yahoo.com", "gmail.com", "yahoo.es", };
