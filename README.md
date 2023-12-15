@@ -35,3 +35,9 @@ PhisherTank can be built on any platform or CI environment supported by dotnet.
 dotnet build ./src/PhisherTank.sln
 ```
 The resulting binaries will be in the `./Build/bin` directory.
+
+## Contribute
+If you think that Phishertank is useful, consider making a donation via
+[PayPal](https://paypal.me/thexds), or contact me directly.
+
+Sadly, I cannot offer any other donation methods, as my country (Honduras) is not supported on any platform. Not even PayPal supports donations per-se to people in Honduras, but at least I have an account there.
