@@ -1,4 +1,6 @@
-﻿namespace ConsoleApp1.Models;
+﻿using TheXDS.MCART.Helpers;
+
+namespace ConsoleApp1.Models;
 
 internal abstract class Attack
 {
@@ -29,5 +31,11 @@ internal abstract class Attack
         {
             context.Headers.Add("Cookie", values.ToArray()[0].Split(';')[0]);
         }
+    }
+
+    protected static AttackItem GetForward(IAttackContext context)
+    {
+        if (!((int)(context.LastResponse?.StatusCode ?? 0)).IsBetween(300, 399)) throw new Exception("Invalid redirect response");
+        return new(context.LastResponse!.Headers.GetValues("Location").First());
     }
 }

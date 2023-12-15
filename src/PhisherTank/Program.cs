@@ -10,7 +10,7 @@ namespace ConsoleApp1
         private static void Main()
         {
             CancellationTokenSource cts = new();
-            var threads = CreateAttackThreads<DrexmHostAttack>(cts.Token, 1).ToArray();
+            var threads = CreateAttackThreads<WebcindarioAttack>(cts.Token, Environment.ProcessorCount).ToArray();
             Console.CancelKeyPress += (_, __) =>
             {
                 Console.WriteLine("Stopping...");
@@ -32,9 +32,9 @@ namespace ConsoleApp1
             Console.CursorLeft = 0;
             var s = 0;
             var f = 0;
-            foreach (var (_, status) in threads)
+            foreach (var (x, status) in threads)
             {
-                Console.WriteLine($"{status} -> {status}");
+                Console.WriteLine($"Task ID {x.Id} -> {status}");
                 s += status.SuccessCounter;
                 f += status.FailureCounter;
             }
