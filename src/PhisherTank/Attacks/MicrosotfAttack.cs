@@ -8,7 +8,6 @@ internal class MicrosotfAttack : LiveBlog365AttackFamily
     {
     }
 
-
     public override IEnumerable<AttackItem> GetAttacks(IAttackContext context)
     {
         context.AddCommonBrowserHeaders();

@@ -32,6 +32,5 @@ internal class DrexmHostAttack : Attack
                 ("D2", f.Password)
             }
         };
-
     }
 }
