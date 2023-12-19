@@ -1,12 +1,15 @@
-﻿using TheXDS.MCART.Helpers;
+﻿using ConsoleApp1.Models;
+using TheXDS.MCART.Helpers;
 
-namespace ConsoleApp1.Models;
+namespace TheXDS.PhisherTank.Models;
 
 internal abstract class Attack
 {
-    public string Server { get; } = string.Empty;
+    public string Server { get; }
 
-    public string Scheme { get; init; } = "http";
+    public string Scheme { get; set; } = null!;
+
+    public int Timeout { get; set; } = 0;
 
     protected Attack(string server)
     {
@@ -14,16 +17,6 @@ internal abstract class Attack
     }
 
     public abstract IEnumerable<AttackItem> GetAttacks(IAttackContext context);
-    
-    public HttpClient CreateClient()
-    {
-        return new HttpClient()
-        {
-            BaseAddress = new Uri($"{Scheme}://{Server}/"),
-            Timeout = TimeSpan.FromSeconds(5)
-        };
-    }
-
 
     protected static void AddCookie(IAttackContext context)
     {
@@ -39,3 +32,5 @@ internal abstract class Attack
         return new(context.LastResponse!.Headers.GetValues("Location").First());
     }
 }
+
+internal record struct AttackThread(Task Task, Status Status);

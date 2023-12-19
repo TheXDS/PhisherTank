@@ -1,19 +1,14 @@
 ﻿namespace ConsoleApp1.Models;
 
-internal class AttackItem
+internal class AttackItem(string route = "")
 {
-    public AttackItem(string route)
-    {
-        Route = route;
-    }
+    public string Route { get; } = route;
 
-    public string Route { get; }
+    public Func<DataBase, IEnumerable<(string key, string value)>>? FormItems { get; init; }
 
-    public Func<FauxData, IEnumerable<(string key, string value)>>? FormItems { get; init; }
+    public Func<DataBase, string>? PlainData { get; init; }
 
-    public Func<FauxData, string>? PlainData { get; init; }
-
-    private HttpContent? GetContent(FauxData context)
+    private HttpContent? GetContent(DataBase context)
     {
         return FormItems?.Invoke(context) is { } frm
             ? MakeForm(frm)
@@ -26,7 +21,7 @@ internal class AttackItem
         return new FormUrlEncodedContent(values.Select(p => new KeyValuePair<string, string>(p.key, p.value)).ToArray());
     }
     
-    public HttpRequestMessage NewRequest(FauxData data)
+    public HttpRequestMessage NewRequest(DataBase data)
     {
         var content = GetContent(data);
         return new HttpRequestMessage(content is null ? HttpMethod.Get : HttpMethod.Post, Route)

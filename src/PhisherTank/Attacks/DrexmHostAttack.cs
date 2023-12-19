@@ -1,5 +1,6 @@
 ﻿using ConsoleApp1.Component;
 using ConsoleApp1.Models;
+using TheXDS.PhisherTank.Models;
 using TheXDS.Triton.Faker;
 
 namespace ConsoleApp1.Attacks;

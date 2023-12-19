@@ -6,7 +6,7 @@ internal interface IAttackContext : IDisposable
 
     Dictionary<string, string> Headers { get; }
 
-    FauxData FauxData { get; }
+    DataBase Data { get; }
 
     bool Failed { get; set; }
 }

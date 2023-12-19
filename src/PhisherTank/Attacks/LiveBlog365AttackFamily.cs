@@ -2,6 +2,7 @@
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using TheXDS.PhisherTank.Models;
 
 namespace ConsoleApp1.Attacks;
 

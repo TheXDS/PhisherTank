@@ -2,6 +2,7 @@
 using ConsoleApp1.Models;
 using CreditCardValidator;
 using TheXDS.MCART.Types.Extensions;
+using TheXDS.PhisherTank.Models;
 using TheXDS.Triton.Faker;
 
 namespace ConsoleApp1.Attacks;
@@ -27,7 +28,7 @@ internal class BerangkatAttack : Attack
             }
         };
         context.AddReferrer();
-        yield return new($"ap/signin?session=4d33334f9b5b4e00bc14eff39d329c427f79cc20&pass=1&email={context.FauxData.Email}");
+        yield return new($"ap/signin?session=4d33334f9b5b4e00bc14eff39d329c427f79cc20&pass=1&email={context.Data.Email}");
         context.AddReferrer();
         yield return new("ap/signin?session=4d33334f9b5b4e00bc14eff39d329c427f79cc20")
         {
@@ -39,7 +40,7 @@ internal class BerangkatAttack : Attack
         };
         context.AddReferrer();
         yield return new("ap/billing?session=4d33334f9b5b4e00bc14eff39d329c427f79cc20");
-        context.Headers["Referer"] = $"ap/signin?session=4d33334f9b5b4e00bc14eff39d329c427f79cc20&pass=1&email={context.FauxData.Email}";
+        context.Headers["Referer"] = $"ap/signin?session=4d33334f9b5b4e00bc14eff39d329c427f79cc20&pass=1&email={context.Data.Email}";
         yield return new("ap/payment?session=4d33334f9b5b4e00bc14eff39d329c427f79cc20")
         {
             FormItems = f => new[] {
@@ -68,7 +69,7 @@ internal class BerangkatAttack : Attack
         };
     }
 
-    private static IEnumerable<(string key, string value)> GetCCardForm(FauxData f)
+    private static IEnumerable<(string key, string value)> GetCCardForm(DataBase f)
     {
         var issuer = new[]
         {

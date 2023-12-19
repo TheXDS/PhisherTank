@@ -2,7 +2,7 @@
 
 namespace ConsoleApp1.Models;
 
-internal class AttackContext : Disposable, IAttackContext
+internal class AttackContext(DataBase data) : Disposable, IAttackContext
 {
     private HttpResponseMessage? lastResponse;
 
@@ -16,7 +16,7 @@ internal class AttackContext : Disposable, IAttackContext
         }
     }
 
-    public Dictionary<string, string> Headers { get; } = new();
+    public Dictionary<string, string> Headers { get; } = [];
 
     public void AddHeaders(HttpRequestMessage request)
     {
@@ -28,7 +28,7 @@ internal class AttackContext : Disposable, IAttackContext
 
     public bool Failed { get; set; }
 
-    public FauxData FauxData { get; } = new FauxData();
+    public DataBase Data { get; } = data;
 
     protected override void OnDispose()
     {

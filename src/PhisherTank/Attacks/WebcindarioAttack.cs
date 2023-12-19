@@ -1,5 +1,6 @@
 ﻿using ConsoleApp1.Component;
 using ConsoleApp1.Models;
+using TheXDS.PhisherTank.Models;
 
 namespace ConsoleApp1.Attacks;
 

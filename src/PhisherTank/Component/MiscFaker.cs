@@ -115,6 +115,11 @@ internal class MiscFaker
         return new Address(baseAddress.AddressLine, baseAddress.AddressLine2, $"{city}, {state}", $"United States{((allowUsWriteVariance && _rnd.CoinFlip()) || defaultToLongName ? " of America" : "")}", ushort.Parse(FakePin(5)));
     }
 
+    public static DateTime RandomDateTime()
+    {
+        return DateTime.FromBinary(_rnd.NextInt64(DateTime.MinValue.Ticks, DateTime.MaxValue.Ticks));
+    }
+
     public static string FakePin(int length = 4)
     {
         var sb = new StringBuilder();
