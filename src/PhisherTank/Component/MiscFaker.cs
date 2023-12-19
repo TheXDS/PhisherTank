@@ -25,7 +25,7 @@ internal class MiscFaker
 
     private static string[] LoadDomains()
     {
-        return new[] { "hotmail.com", "hotmail.com", "live.com", "hotmail.com", "hotmail.com", "hotmail.es", "hotmail.com", "gmail.com", "gmail.com", "gmail.com", "gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "yahoo.com", "yahoo.com", "gmail.com", "yahoo.es", };
+        return ["hotmail.com", "hotmail.com", "live.com", "hotmail.com", "hotmail.com", "hotmail.es", "hotmail.com", "gmail.com", "gmail.com", "gmail.com", "gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "yahoo.com", "yahoo.com", "gmail.com", "yahoo.es",];
     }
     private static Dictionary<string, string[]> LoadUsRegions()
     {
@@ -90,15 +90,15 @@ internal class MiscFaker
     public static string RandomResolution()
     {
         return  _rnd.CoinFlip()
-            ? (resolutions ??= new[] 
-            { 
+            ? (resolutions ??=
+            [
                 "1024+x+768", "1280+x+720", "1280+x+800", "1152+x+864", "1366+x+768", "1280+x+960", "1440+x+960", "1680+x+1050", "1600+x+1200",
                 "1920+x+1080", "1920+x+1080", "1920+x+1080", "1920+x+1080",
                 "1920+x+1200", "1920+x+1200", "1920+x+1200",
                 "2560+x+1440",
                 "2560+x+1600",
                 "3840+x+2160",
-            }).Pick()
+            ]).Pick()
             : "1920+x+1080";
     }
 
