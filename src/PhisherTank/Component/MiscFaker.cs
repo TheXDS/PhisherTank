@@ -1,15 +1,9 @@
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
-using System;
-using System.Text;
-using TheXDS.MCART.Math;
+﻿using System.Text;
 using TheXDS.MCART.Types.Extensions;
 using TheXDS.Triton.Faker;
 using static TheXDS.MCART.Types.Extensions.RandomExtensions;
-using ConsoleApp1.Models;
-using CreditCardValidator;
 
-namespace ConsoleApp1.Component;
+namespace TheXDS.PhisherTank.Component;
 
 internal class MiscFaker
 {
@@ -31,35 +25,35 @@ internal class MiscFaker
     {
         return new()
         {
-            {"Alabama", new[] { "Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa" } },
-            {"Alaska", new[] { "Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan" } },
-            {"Arizona", new[] { "Phoenix", "Tucson", "Mesa", "Chandler", "Scottsdale" } },
-            {"Arkansas", new[] { "Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro" } },
-            {"California", new[] { "Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno" } },
-            {"North Carolina", new[] { "Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem" } },
-            {"South Carolina", new[] { "Columbia", "Charleston", "North Charleston", "Greenville", "Rock Hill" } },
-            {"Colorado", new[] { "Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood" } },
-            {"Connecticut", new[] { "Bridgeport", "New Haven", "Stamford", "Hartford", "Waterbury" } },
-            {"North Dakota", new[] { "Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo" } },
-            {"South Dakota", new[] { "Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown" } },
-            {"Delaware", new[] { "Wilmington", "Dover", "Newark", "Middletown", "Smyrna" } },
-            {"Florida", new[] { "Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg" } },
-            {"Georgia", new[] { "Atlanta", "Augusta", "Columbus", "Savannah", "Athens" } },
-            {"Hawaii", new[] { "Honolulu", "Pearl City", "Hilo", "Kailua", "Waipahu" } },
-            {"Idaho", new[] { "Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello" } },
-            {"Illinois", new[] { "Chicago", "Aurora", "Rockford", "Joliet", "Naperville" } },
-            {"Indiana", new[] { "Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel" } },
-            {"Iowa", new[] { "Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City" } },
-            {"Kansas", new[] { "Wichita", "Overland Park", "Kansas City", "Topeka", "Olathe" } },
-            {"Kentucky", new[] { "Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington" } },
-            {"Louisiana", new[] { "New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles" } },
-            {"Maine", new[] { "Portland", "Lewiston", "Bangor", "South Portland", "Auburn" } },
-            {"Maryland", new[] { "Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie" } },
-            {"Massachusetts", new[] { "Boston", "Worcester", "Springfield", "Cambridge", "Lowell" } },
-            {"Michigan", new[] { "Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Lansing" } },
-            {"Minnesota", new[] { "Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington" } },
-            {"Mississippi", new[] { "Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi" } },
-            {"Missouri", new[] { "Kansas City", "Saint Louis", "Springfield", "Independence", "Columbia" } },
+            {"Alabama", [ "Birmingham", "Montgomery", "Mobile", "Huntsville", "Tuscaloosa" ] },
+            {"Alaska", [ "Anchorage", "Fairbanks", "Juneau", "Sitka", "Ketchikan" ] },
+            {"Arizona", [ "Phoenix", "Tucson", "Mesa", "Chandler", "Scottsdale" ] },
+            {"Arkansas", [ "Little Rock", "Fort Smith", "Fayetteville", "Springdale", "Jonesboro" ] },
+            {"California", [ "Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno" ] },
+            {"North Carolina", [ "Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem" ] },
+            {"South Carolina", [ "Columbia", "Charleston", "North Charleston", "Greenville", "Rock Hill" ] },
+            {"Colorado", [ "Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood" ] },
+            {"Connecticut", [ "Bridgeport", "New Haven", "Stamford", "Hartford", "Waterbury" ] },
+            {"North Dakota", [ "Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo" ] },
+            {"South Dakota", [ "Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown" ] },
+            {"Delaware", [ "Wilmington", "Dover", "Newark", "Middletown", "Smyrna" ] },
+            {"Florida", [ "Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg" ] },
+            {"Georgia", [ "Atlanta", "Augusta", "Columbus", "Savannah", "Athens" ] },
+            {"Hawaii", [ "Honolulu", "Pearl City", "Hilo", "Kailua", "Waipahu" ] },
+            {"Idaho", [ "Boise", "Meridian", "Nampa", "Idaho Falls", "Pocatello" ] },
+            {"Illinois", [ "Chicago", "Aurora", "Rockford", "Joliet", "Naperville" ] },
+            {"Indiana", [ "Indianapolis", "Fort Wayne", "Evansville", "South Bend", "Carmel" ] },
+            {"Iowa", [ "Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City" ] },
+            {"Kansas", [ "Wichita", "Overland Park", "Kansas City", "Topeka", "Olathe" ] },
+            {"Kentucky", [ "Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington" ] },
+            {"Louisiana", [ "New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles" ] },
+            {"Maine", [ "Portland", "Lewiston", "Bangor", "South Portland", "Auburn" ] },
+            {"Maryland", [ "Baltimore", "Frederick", "Rockville", "Gaithersburg", "Bowie" ] },
+            {"Massachusetts", [ "Boston", "Worcester", "Springfield", "Cambridge", "Lowell" ] },
+            {"Michigan", [ "Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Lansing" ] },
+            {"Minnesota", [ "Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington" ] },
+            {"Mississippi", [ "Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi" ] },
+            {"Missouri", [ "Kansas City", "Saint Louis", "Springfield", "Independence", "Columbia" ] },
         };
     }
 
@@ -89,12 +83,25 @@ internal class MiscFaker
 
     public static string RandomResolution()
     {
-        return  _rnd.CoinFlip()
+        return _rnd.CoinFlip()
             ? (resolutions ??=
             [
-                "1024+x+768", "1280+x+720", "1280+x+800", "1152+x+864", "1366+x+768", "1280+x+960", "1440+x+960", "1680+x+1050", "1600+x+1200",
-                "1920+x+1080", "1920+x+1080", "1920+x+1080", "1920+x+1080",
-                "1920+x+1200", "1920+x+1200", "1920+x+1200",
+                "1024+x+768",
+                "1280+x+720",
+                "1280+x+800",
+                "1152+x+864",
+                "1366+x+768",
+                "1280+x+960",
+                "1440+x+960",
+                "1680+x+1050",
+                "1600+x+1200",
+                "1920+x+1080",
+                "1920+x+1080",
+                "1920+x+1080",
+                "1920+x+1080",
+                "1920+x+1200",
+                "1920+x+1200",
+                "1920+x+1200",
                 "2560+x+1440",
                 "2560+x+1600",
                 "3840+x+2160",
@@ -112,7 +119,7 @@ internal class MiscFaker
         var baseAddress = Address.NewAddress();
         var state = (usRegions ??= LoadUsRegions()).Keys.Pick();
         var city = usRegions[state].Pick();
-        return new Address(baseAddress.AddressLine, baseAddress.AddressLine2, $"{city}, {state}", $"United States{((allowUsWriteVariance && _rnd.CoinFlip()) || defaultToLongName ? " of America" : "")}", ushort.Parse(FakePin(5)));
+        return new Address(baseAddress.AddressLine, baseAddress.AddressLine2, $"{city}, {state}", $"United States{(allowUsWriteVariance && _rnd.CoinFlip() || defaultToLongName ? " of America" : "")}", int.Parse(FakePin(5)));
     }
 
     public static DateTime RandomDateTime()

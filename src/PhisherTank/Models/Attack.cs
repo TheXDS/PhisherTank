@@ -1,5 +1,4 @@
-﻿using ConsoleApp1.Models;
-using TheXDS.MCART.Helpers;
+﻿using TheXDS.MCART.Helpers;
 
 namespace TheXDS.PhisherTank.Models;
 

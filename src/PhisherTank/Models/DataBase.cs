@@ -1,8 +1,8 @@
 ﻿using TheXDS.Triton.Faker;
 
-namespace ConsoleApp1.Models;
+namespace TheXDS.PhisherTank.Models;
 
-internal abstract class DataBase
+public abstract class DataBase
 {
     public Person Person { get; protected init; } = null!;
     public string Email { get; protected init; } = null!;

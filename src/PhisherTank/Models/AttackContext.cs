@@ -1,6 +1,6 @@
 ﻿using TheXDS.MCART.Types.Base;
 
-namespace ConsoleApp1.Models;
+namespace TheXDS.PhisherTank.Models;
 
 internal class AttackContext(DataBase data) : Disposable, IAttackContext
 {

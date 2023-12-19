@@ -1,11 +1,11 @@
-﻿using ConsoleApp1.Component;
-using CreditCardValidator;
+﻿using CreditCardValidator;
 using TheXDS.MCART.Types.Extensions;
+using TheXDS.PhisherTank.Component;
 using TheXDS.Triton.Faker;
 
-namespace ConsoleApp1.Models;
+namespace TheXDS.PhisherTank.Models;
 
-internal class CreditCard
+public class CreditCard
 {
     public string Number { get; }
     public string Name { get; }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PhisherTank": {
+      "commandName": "Project",
+      "commandLineArgs": "attack Webcindario -d usfaux --threads 1"
+    }
+  }
+}

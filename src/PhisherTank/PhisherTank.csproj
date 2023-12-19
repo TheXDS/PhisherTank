@@ -11,6 +11,6 @@
 		<PackageReference Include="CreditCardValidator" Version="3.0.1" />
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
 		<PackageReference Include="TheXDS.MCART" Version="0.17.1-alpha.4" />
-		<PackageReference Include="TheXDS.Triton.Faker" Version="1.6.1-a002" />
+		<PackageReference Include="TheXDS.Triton.Faker" Version="1.6.1-alpha3" />
 	</ItemGroup>
 </Project>

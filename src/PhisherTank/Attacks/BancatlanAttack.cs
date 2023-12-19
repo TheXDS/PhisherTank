@@ -1,6 +1,6 @@
-﻿using ConsoleApp1.Models;
+﻿using TheXDS.PhisherTank.Models;
 
-namespace ConsoleApp1.Attacks;
+namespace TheXDS.PhisherTank.Attacks;
 
 internal class BancatlanAttack : LiveBlog365AttackFamily
 {

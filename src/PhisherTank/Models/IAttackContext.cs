@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp1.Models;
+﻿namespace TheXDS.PhisherTank.Models;
 
 internal interface IAttackContext : IDisposable
 {

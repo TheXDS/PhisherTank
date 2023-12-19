@@ -1,13 +1,12 @@
-﻿using ConsoleApp1.Models;
+﻿using TheXDS.PhisherTank.Models;
 
-namespace ConsoleApp1.Attacks;
+namespace TheXDS.PhisherTank.Attacks;
 
 internal class Serviciosonline202323Attack : LiveBlog365AttackFamily
 {
     public Serviciosonline202323Attack() : base("serviciosonline202323.iceiy.com")
     {
     }
-
 
     public override IEnumerable<AttackItem> GetAttacks(IAttackContext context)
     {

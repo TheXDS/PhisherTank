@@ -1,8 +1,7 @@
-﻿using ConsoleApp1.Component;
-using ConsoleApp1.Models;
+﻿using TheXDS.PhisherTank.Component;
 using TheXDS.PhisherTank.Models;
 
-namespace ConsoleApp1.Attacks;
+namespace TheXDS.PhisherTank.Attacks;
 
 internal class WebcindarioAttack : Attack
 {
@@ -15,6 +14,7 @@ internal class WebcindarioAttack : Attack
     {
         context.AddCommonBrowserHeaders();
         yield return new("");
+        AddCookie(context);
         yield return new("popeye.php")
         {
             FormItems = f => new[]
@@ -24,5 +24,6 @@ internal class WebcindarioAttack : Attack
                 ("namee", MiscFaker.FakePin())
             }
         };
+        context.CheckResponse("www.microsoft.com");
     }
 }

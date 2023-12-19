@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp1.Models;
+﻿namespace TheXDS.PhisherTank.Models;
 
 internal class Status
 {
@@ -15,6 +15,9 @@ internal class Status
     public void Success() { lock (syncLock) SuccessCounter++; }
 
     public void Failure(string message) { lock (syncLock) FailureCounter++; StatusDetails = message; }
-    
-    public override string ToString() => $"Success: {SuccessCounter}, failures: {FailureCounter} (Last error: {StatusDetails ?? "none"})";
+
+    public override string ToString()
+    {
+        return $"Success: {SuccessCounter}, failures: {FailureCounter} (Last error: {StatusDetails ?? "none"})";
+    }
 }

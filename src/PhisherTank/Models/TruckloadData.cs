@@ -1,6 +1,6 @@
-﻿namespace ConsoleApp1.Models;
+﻿namespace TheXDS.PhisherTank.Models;
 
-internal class TruckloadData(int size) : GarbageDataBase(size)
+public class TruckloadData(int size) : GarbageDataBase(size)
 {
     public TruckloadData() : this(64000)
     {

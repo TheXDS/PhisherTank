@@ -1,6 +1,6 @@
-﻿namespace ConsoleApp1.Models;
+﻿namespace TheXDS.PhisherTank.Models;
 
-internal class GarbageData : GarbageDataBase
+public class GarbageData : GarbageDataBase
 {
     public GarbageData() : base(40)
     {

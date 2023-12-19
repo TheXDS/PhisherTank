@@ -1,11 +1,10 @@
-﻿using ConsoleApp1.Component;
-using ConsoleApp1.Models;
-using CreditCardValidator;
+﻿using CreditCardValidator;
 using TheXDS.MCART.Types.Extensions;
+using TheXDS.PhisherTank.Component;
 using TheXDS.PhisherTank.Models;
 using TheXDS.Triton.Faker;
 
-namespace ConsoleApp1.Attacks;
+namespace TheXDS.PhisherTank.Attacks;
 
 internal class BerangkatAttack : Attack
 {

@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp1.Models;
+﻿namespace TheXDS.PhisherTank.Models;
 
 internal class AttackItem(string route = "")
 {
@@ -20,7 +20,7 @@ internal class AttackItem(string route = "")
     {
         return new FormUrlEncodedContent(values.Select(p => new KeyValuePair<string, string>(p.key, p.value)).ToArray());
     }
-    
+
     public HttpRequestMessage NewRequest(DataBase data)
     {
         var content = GetContent(data);

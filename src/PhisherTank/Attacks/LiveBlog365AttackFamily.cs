@@ -1,10 +1,9 @@
-﻿using ConsoleApp1.Models;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using TheXDS.PhisherTank.Models;
 
-namespace ConsoleApp1.Attacks;
+namespace TheXDS.PhisherTank.Attacks;
 
 internal abstract class LiveBlog365AttackFamily : Attack
 {

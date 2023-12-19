@@ -1,9 +1,8 @@
-﻿using ConsoleApp1.Component;
-using ConsoleApp1.Models;
+﻿using TheXDS.PhisherTank.Component;
 using TheXDS.PhisherTank.Models;
 using TheXDS.Triton.Faker;
 
-namespace ConsoleApp1.Attacks;
+namespace TheXDS.PhisherTank.Attacks;
 
 internal class DrexmHostAttack : Attack
 {

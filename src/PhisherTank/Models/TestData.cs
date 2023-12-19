@@ -1,9 +1,9 @@
-﻿using ConsoleApp1.Component;
+﻿using TheXDS.PhisherTank.Component;
 using TheXDS.Triton.Faker;
 
-namespace ConsoleApp1.Models;
+namespace TheXDS.PhisherTank.Models;
 
-internal class TestData : DataBase
+public class TestData : DataBase
 {
     private class TestPerson() : Person("Test", "Test", Gender.Female, DateTime.Now);
     public TestData()

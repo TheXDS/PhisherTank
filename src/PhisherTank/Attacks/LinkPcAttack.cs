@@ -1,12 +1,11 @@
-﻿using ConsoleApp1.Component;
-using ConsoleApp1.Models;
+﻿using TheXDS.PhisherTank.Component;
 using TheXDS.PhisherTank.Models;
 
-namespace ConsoleApp1.Attacks;
+namespace TheXDS.PhisherTank.Attacks;
 
 internal class LinkPcAttack : Attack
 {
-    public LinkPcAttack(): base("appsingin-webserv.accesamznssmanaged.linkpc.net")
+    public LinkPcAttack() : base("appsingin-webserv.accesamznssmanaged.linkpc.net")
     {
     }
 
