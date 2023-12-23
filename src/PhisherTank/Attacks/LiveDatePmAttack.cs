@@ -7,6 +7,7 @@ internal class LiveDatePmAttack : Attack
 {
     public LiveDatePmAttack() : base("live-date.line.pm")
     {
+        MiscFaker.SetDomains("hotmail.com", "hotmail.com", "outlook.com", "hotmail.es", "hotmail.com");
     }
 
     public override IEnumerable<AttackItem> GetAttacks(IAttackContext context)
