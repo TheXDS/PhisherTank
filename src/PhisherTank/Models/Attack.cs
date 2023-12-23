@@ -10,6 +10,14 @@ internal abstract class Attack
 
     public int Timeout { get; set; } = 0;
 
+    public HttpClient? Client { get; set; } = null!;
+
+    public void SwitchServer(string newServer)
+    {
+        Client?.Dispose();
+        Client = CreateClient(newServer);
+    }
+
     protected Attack(string server)
     {
         Server = server;
@@ -30,6 +38,13 @@ internal abstract class Attack
         if (!((int)(context.LastResponse?.StatusCode ?? 0)).IsBetween(300, 399)) throw new Exception("Invalid redirect response");
         return new(context.LastResponse!.Headers.GetValues("Location").First());
     }
-}
 
-internal record struct AttackThread(Task Task, Status Status);
+    private HttpClient CreateClient(string server)
+    {
+        return new HttpClient()
+        {
+            BaseAddress = new Uri($"{Scheme}://{server}/"),
+            Timeout = TimeSpan.FromSeconds(Timeout)
+        };
+    }
+}

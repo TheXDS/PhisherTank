@@ -29,4 +29,6 @@ internal class AttackItem(string route = "")
             Content = content
         };
     }
+
+    public static implicit operator AttackItem(string url) => new(url);
 }
