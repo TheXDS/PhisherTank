@@ -37,7 +37,8 @@ dotnet build ./src/PhisherTank.sln
 The resulting binaries will be in the `./Build/bin` directory.
 
 ## Contribute
-If you think that Phishertank is useful, consider making a donation via
-[PayPal](https://paypal.me/thexds), or contact me directly.
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/default-orange.png)](https://www.buymeacoffee.com/xdsxpsivx)
 
-Sadly, I cannot offer any other donation methods, as my country (Honduras) is not supported on any platform. Not even PayPal supports donations per-se to people in Honduras, but at least I have an account there.
+If `PhisherTank` is useful to you, or if you're interested in donating to sponsor the project, feel free to to a donation via [PayPal](https://paypal.me/thexds), [BuyMeACoffee](https://www.buymeacoffee.com/xdsxpsivx) or just contact me directly.
+
+Sadly, I cannot offer other means of sending donations as of right now due to my country (Honduras) not being supported by almost any platform.
