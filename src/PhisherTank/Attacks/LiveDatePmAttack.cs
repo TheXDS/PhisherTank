@@ -22,7 +22,7 @@ internal class LiveDatePmAttack : Attack
         };
         yield return $"37/home.php?correo={context.Data.Email}";
         var pin = MiscFaker.FakePin();
-        SwitchServer("pins-date.line.pm");
+        context.SwitchServer("pins-date.line.pm", this);
         yield return new("37/2.php")
         {
             FormItems = f => new[]

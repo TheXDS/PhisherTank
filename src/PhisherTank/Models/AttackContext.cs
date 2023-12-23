@@ -30,8 +30,25 @@ internal class AttackContext(DataBase data) : Disposable, IAttackContext
 
     public DataBase Data { get; } = data;
 
+    public HttpClient? Client { get; set; }
+
     protected override void OnDispose()
     {
         LastResponse?.Dispose();
+        Client?.Dispose();
     }
-}
+
+    public void SwitchServer(string newServer, Attack attack)
+    {
+        Client?.Dispose();
+        Client = CreateClient(newServer, attack);
+    }
+
+    private static HttpClient CreateClient(string server, Attack attack)
+    {
+        return new HttpClient()
+        {
+            BaseAddress = new Uri($"{attack.Scheme}://{server}/"),
+            Timeout = TimeSpan.FromSeconds(attack.Timeout)
+        };
+    }}

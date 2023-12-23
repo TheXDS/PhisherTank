@@ -76,12 +76,12 @@ internal class AttackCommand : PhisherCommand
     private static async Task RunAttack(Attack attack, Status counter, AttackData data, CancellationToken cancellationToken)
     {
         using AttackContext context = new(Map(data));
-        attack.SwitchServer(attack.Server);
+        context.SwitchServer(attack.Server, attack);
         foreach (var item in attack.GetAttacks(context))
         {
             using var request = item.NewRequest(context.Data);
             context.AddHeaders(request);
-            context.LastResponse = await attack.Client!.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            context.LastResponse = await context.Client!.SendAsync(request, cancellationToken).ConfigureAwait(false);
             if (!keepRunning || context.CheckResponse()) break;
         }
         UpdateStatistics(context, counter);
