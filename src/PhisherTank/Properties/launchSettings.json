@@ -2,7 +2,7 @@
   "profiles": {
     "PhisherTank": {
       "commandName": "Project",
-      "commandLineArgs": "attack LiveDatePm -d usfaux --https"
+      "commandLineArgs": "attack BacDappLinePm -d usfaux --https --threads 1"
     }
   }
 }
