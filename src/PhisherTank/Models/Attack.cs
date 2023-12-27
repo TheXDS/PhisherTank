@@ -27,6 +27,9 @@ internal abstract class Attack
 
     protected static AttackItem GetForward(IAttackContext context)
     {
+        //HACK: Patch for forwarding simulation
+        if (context.Client is null) return "< Some forwarded URL >";
+
         if (!((int)(context.LastResponse?.StatusCode ?? 0)).IsBetween(300, 399)) throw new Exception("Invalid redirect response");
         return new(context.LastResponse!.Headers.GetValues("Location").First());
     }

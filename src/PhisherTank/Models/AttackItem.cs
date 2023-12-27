@@ -8,7 +8,7 @@ internal class AttackItem(string route = "")
 
     public Func<DataBase, string>? PlainData { get; init; }
 
-    private HttpContent? GetContent(DataBase context)
+    public HttpContent? GetContent(DataBase context)
     {
         return FormItems?.Invoke(context) is { } frm
             ? MakeForm(frm)

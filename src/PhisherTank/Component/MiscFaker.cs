@@ -17,6 +17,8 @@ internal class MiscFaker
         fakeDomains = domains;
     }
 
+    public static IEnumerable<string> Domains => fakeDomains ?? [];
+
     private static string[] LoadDomains()
     {
         return ["hotmail.com", "hotmail.com", "live.com", "hotmail.com", "hotmail.com", "hotmail.es", "hotmail.com", "gmail.com", "gmail.com", "gmail.com", "gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "yahoo.com", "yahoo.com", "gmail.com", "yahoo.es",];

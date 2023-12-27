@@ -14,7 +14,6 @@ internal class LinkPcAttack : Attack
         context.AddCommonBrowserHeaders();
         yield return new("");
         AddCookie(context);
-        context.Headers.Add("DNT", "1");
         yield return new("sign");
         yield return new("sign/process")
         {

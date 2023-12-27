@@ -24,7 +24,7 @@ internal class BancatlanAttack : LiveBlog365AttackFamily
                 ("teke", f.Password)
             }
         };
-        var pureCookie = context.Headers["Cookie"];
+        var pureCookie = context.Headers.TryGetValue("Cookie", out var v) ? v : string.Empty;
         context.Headers["Referer"] = "http://bancatlantrustt.liveblog365.com/index2.html";
         context.Headers["Cookie"] = $"{pureCookie}; dtCookie=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQEBREOPMOK1Q4M5FIP2; rxVisito" +
             $"r=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7; dtPC=-9$31207713_250h1vOGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-" +
