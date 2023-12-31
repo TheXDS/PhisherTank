@@ -13,17 +13,9 @@ internal class WebcindarioAttack : Attack
     public override IEnumerable<AttackItem> GetAttacks(IAttackContext context)
     {
         context.AddCommonBrowserHeaders();
-        yield return new("");
+        yield return "";
         AddCookie(context);
-        yield return new("popeye.php")
-        {
-            FormItems = f => new[]
-            {
-                ("nm1", f.Email),
-                ("nm2", f.Password),
-                ("namee", MiscFaker.FakePin())
-            }
-        };
+        yield return Form("popeye.php", EmailPasswordForm("nm1", "nm2", ("namee", MiscFaker.FakePin())));
         context.CheckResponse("www.microsoft.com");
     }
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "PhisherTank": {
       "commandName": "Project",
-      "commandLineArgs": "attack BacDappLinePm -d usfaux --https --threads 1"
+      "commandLineArgs": "attack ActivityNewTelegramBot --https --threads 4"
     }
   }
 }

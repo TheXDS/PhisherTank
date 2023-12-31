@@ -1,40 +1,29 @@
-﻿using TheXDS.PhisherTank.Models;
+﻿using TheXDS.PhisherTank.Attacks.Base;
+using TheXDS.PhisherTank.Models;
 
 namespace TheXDS.PhisherTank.Attacks;
 
-internal class BancatlanAttack : LiveBlog365AttackFamily
+internal class BancatlanAttack() : LiveBlog365AttackFamily("bancatlantrustt.liveblog365.com")
 {
-    public BancatlanAttack() : base("bancatlantrustt.liveblog365.com")
-    {
-    }
-
     public override IEnumerable<AttackItem> GetAttacks(IAttackContext context)
     {
         context.AddCommonBrowserHeaders();
-        yield return new("");
+        yield return "";
         GetCookie(context);
         context.AddReferrer();
-        yield return new("?i=1");
+        yield return "?i=1";
         context.AddReferrer();
-        yield return new("mpa.php")
-        {
-            FormItems = f => new[]
-            {
-                ("taka", f.Email),
-                ("teke", f.Password)
-            }
-        };
+        yield return Form("mpa.php", EmailPasswordForm("taka", "teke"));
         var pureCookie = context.Headers.TryGetValue("Cookie", out var v) ? v : string.Empty;
         context.Headers["Referer"] = "http://bancatlantrustt.liveblog365.com/index2.html";
         context.Headers["Cookie"] = $"{pureCookie}; dtCookie=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQEBREOPMOK1Q4M5FIP2; rxVisito" +
             $"r=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7; dtPC=-9$31207713_250h1vOGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-" +
             $"0e0; dtLatC=2; dtSa=-; rxvt=1692033009987|1692031207717";
-        yield return new("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQE" +
+        yield return Raw("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQE" +
             "BREOPMOK1Q4M5FIP2&svrid=-9&flavor=post&vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0&modifiedSince=1691173329539&r" +
             "f=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html&bp=3&app=54d2e0bdb86aa8c4&crc=3037917525&en=o" +
-            "thww5w2&end=1")
-        {
-            PlainData = _ => "$a=1%7C1%7C_load_%7C_load_%7C-%7C1692031205644%7C0%7Cdn%7C-1%7Csvtrg%7C1%7Csvm%7Ci1%5Esk0%" +
+            "thww5w2&end=1",
+            _ => "$a=1%7C1%7C_load_%7C_load_%7C-%7C1692031205644%7C0%7Cdn%7C-1%7Csvtrg%7C1%7Csvm%7Ci1%5Esk0%" +
             "5Esh0%7Clr%7Chttp%3A%2F%2Fbancatlantrustt.liveblog365.com%2F%3Fi%3D1%2C2%7C2%7Cui5loader-autoconfig.js%3A%" +
             "20could%20not%20determine%20base%20URL.%20No%20known%20script%20tag%20and%20no%20configuration%20found%21%" +
             "7C_error_%7C-%7C1692031209981%7C1692031209981%7Cdn%7C-1%2C3%7C3%7CError%7C_type_%7C-%7C1692031209983%7C169" +
@@ -48,17 +37,14 @@ internal class BancatlanAttack : LiveBlog365AttackFamily
             "09987%7C1692031209987%7Cdn%7C-1$dO=bancatlantrustt.liveblog365.com,bancatlan.hn$PV=1$rId=RID_54233326$rpId" +
             "=1256470564$url=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html$title=Atl%C3%A1ntida%20Online$l" +
             "atC=2$app=54d2e0bdb86aa8c4$vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0$fId=31207713_250$v=10257221222094147$time" +
-            "=1692031215766"
-        };
+            "=1692031215766");
         context.Headers["Cookie"] = $"{pureCookie}; dtCookie=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQEBREOPMOK1Q4M5FIP2; rxVisito" +
             $"r=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7; dtLatC=2; dtSa=-; rxvt=1692033033441|1692031207717; dtPC" +
             $"=-9$31207713_250h-vOGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0e0";
-        yield return new("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQE" +
+        yield return Raw("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQE" +
             "BREOPMOK1Q4M5FIP2&svrid=-9&flavor=post&vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0&modifiedSince=1691173329539&r" +
             "f=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html&bp=3&app=54d2e0bdb86aa8c4&crc=756952484&en=ot" +
-            "hww5w2&end=1")
-        {
-            PlainData = _ => "$a=1%7C1%7C_load_%7C_load_%7C-%7C1692031205644%7C1692031233443%7Cdn%7C238%7Csvtrg%7C1%7Cs" +
+            "hww5w2&end=1", _ => "$a=1%7C1%7C_load_%7C_load_%7C-%7C1692031205644%7C1692031233443%7Cdn%7C238%7Csvtrg%7C1%7Cs" +
             "vm%7Ci1%5Esk0%5Esh0%7Ctvtrg%7C1%7Ctvm%7Ci1%5Esk0%5Esh0%7Clr%7Chttp%3A%2F%2Fbancatlantrustt.liveblog365.com" +
             "%2F%3Fi%3D1%2C2%7C14%7C_event_%7C1692031232368%7C_csprv_%7CdocumentURL%7Chttp%3A%2F%2Fbancatlantrustt.live" +
             "blog365.com%2Findex2.html%7Creferrer%7Chttp%3A%2F%2Fbancatlantrustt.liveblog365.com%2F%3Fi%3D1%7CblockedUR" +
@@ -127,18 +113,15 @@ internal class BancatlanAttack : LiveBlog365AttackFamily
             "=951$sw=1920$sh=1080$nt=a0b1692031205644c5d381e381f381g381h381i381k384l609m610o26358p26358q26359r27796s277" +
             "99t27799u8662v8362w42925$ni=4g|1.4$url=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html$title=At" +
             "l%C3%A1ntida%20Online$latC=2$app=54d2e0bdb86aa8c4$vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0$fId=31207713_250$v" +
-            "=10257221222094147$vID=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7$nV=1$nVAT=1$time=1692031234544"
-        };
+            "=10257221222094147$vID=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7$nV=1$nVAT=1$time=1692031234544");
 
         context.Headers["Cookie"] = $"{pureCookie}; dtCookie=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQEBREOPMOK1Q4M5FIP2; rxVisito" +
             $"r=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7; dtLatC=2; dtSa=-; rxvt=1692033033441|1692031207717; dtPC" +
             $"=-9$31207713_250h-vOGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0e0";
-        yield return new("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQE" +
+        yield return Raw("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQE" +
             "BREOPMOK1Q4M5FIP2&svrid=-9&flavor=post&vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0&modifiedSince=1691173329539&r" +
             "f=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html&bp=3&app=54d2e0bdb86aa8c4&crc=756952484&en=ot" +
-            "hww5w2&end=1")
-        {
-            PlainData = _ => "$a=1%7C1%7C_load_%7C_load_%7C-%7C1692031205644%7C1692031233443%7Cdn%7C238%7Csvtrg%7C1%7Cs" +
+            "hww5w2&end=1", _ => "$a=1%7C1%7C_load_%7C_load_%7C-%7C1692031205644%7C1692031233443%7Cdn%7C238%7Csvtrg%7C1%7Cs" +
             "vm%7Ci1%5Esk0%5Esh0%7Ctvtrg%7C1%7Ctvm%7Ci1%5Esk0%5Esh0%7Clr%7Chttp%3A%2F%2Fbancatlantrustt.liveblog365.com" +
             "%2F%3Fi%3D1%2C2%7C14%7C_event_%7C1692031232368%7C_csprv_%7CdocumentURL%7Chttp%3A%2F%2Fbancatlantrustt.live" +
             "blog365.com%2Findex2.html%7Creferrer%7Chttp%3A%2F%2Fbancatlantrustt.liveblog365.com%2F%3Fi%3D1%7CblockedUR" +
@@ -207,18 +190,15 @@ internal class BancatlanAttack : LiveBlog365AttackFamily
             "=951$sw=1920$sh=1080$nt=a0b1692031205644c5d381e381f381g381h381i381k384l609m610o26358p26358q26359r27796s277" +
             "99t27799u8662v8362w42925$ni=4g|1.4$url=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html$title=At" +
             "l%C3%A1ntida%20Online$latC=2$app=54d2e0bdb86aa8c4$vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0$fId=31207713_250$v" +
-            "=10257221222094147$vID=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7$nV=1$nVAT=1$time=1692031234544"
-        };
+            "=10257221222094147$vID=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7$nV=1$nVAT=1$time=1692031234544");
 
         context.Headers["Cookie"] = $"{pureCookie}; dtCookie=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQEBREOPMOK1Q4M5FIP2; rxVisito" +
             $"r=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7; dtLatC=2; dtSa=-; rxvt=1692033033441|1692031207717; dtPC" +
             $"=-9$31207713_250h-vOGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0e0";
-        yield return new("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SN" +
+        yield return Raw("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SN" +
             "FGPMQEBREOPMOK1Q4M5FIP2&svrid=-9&flavor=post&vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0&modifiedSince=169117332" +
             "9539&rf=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html&bp=3&app=54d2e0bdb86aa8c4&crc=270258415" +
-            "2&en=othww5w2&end=1")
-        {
-            PlainData = _ => "$tvn=%2Findex2.html$tvt=1692031205644$tvm=i1%3Bk0%3Bh0$tvtrg=1$ni=4g|1.4$rt=1-16920312056" +
+            "2&en=othww5w2&end=1", _ => "$tvn=%2Findex2.html$tvt=1692031205644$tvm=i1%3Bk0%3Bh0$tvtrg=1$ni=4g|1.4$rt=1-16920312056" +
             "44%3Bhttp%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2_5Ffiles%2Fpreloader.css%7Cb617e0f0g0h0i0k7l161m" +
             "162u744v444w988K1I11%7Chttp%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2_5Ffiles%2Fprint.css%7Cb617e0f" +
             "0g0h0i0k9l161m162u803v503w1006K1I11%7Cfile%3A%2F%2F%2FC%3A%2Fxampp%2Fhtdocs%2Fatlanti%2Findex_5Ffiles%2Fco" +
@@ -271,34 +251,23 @@ internal class BancatlanAttack : LiveBlog365AttackFamily
             "bretail%2Fimg%2Ficon%2Ffavicon-128.png%7Cb27807e0m0I22%7Chttps%3A%2F%2Faolweb.bancatlan.hn%2Focbretail%2Fi" +
             "mg%2Ficon%2Ffavicon-196x196.png%7Cb27807e0m0I22$url=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2." +
             "html$title=Atl%C3%A1ntida%20Online$latC=2$app=54d2e0bdb86aa8c4$vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0$fId=3" +
-            "1207713_250$v=10257221222094147$vID=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7$time=1692031236584"
-        };
+            "1207713_250$v=10257221222094147$vID=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7$time=1692031236584");
         context.Headers["Cookie"] = $"{pureCookie}; dtCookie=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQEBREOPMOK1Q4M5FIP2; rxVisito" +
             $"r=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7; dtLatC=2; rxvt=1692033033441|1692031207717; dtPC=-9$3120" +
             $"7713_250h-vOGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0e0; dtSa=true%7CC%7C-1%7CINICIAR%20SESI%C3%93N%7C-%7C1692031" +
             $"257735%7C31207713_250%7Chttp%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html%7C%7C%7C%7C";
-        yield return new("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQE" +
+        yield return Raw("ocbretail/rb_2f4942fa-a829-48bb-b04d-dc604b453513?type=js3&sn=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQE" +
             "BREOPMOK1Q4M5FIP2&svrid=-9&flavor=post&vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0&modifiedSince=1691173329539&r" +
             "f=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html&bp=3&app=54d2e0bdb86aa8c4&crc=576777031&en=ot" +
-            "hww5w2&end=1")
-        {
-            PlainData = _ => "$a=1%7C25%7C_event_%7C1692031245166%7C_wv_%7CAAI%7C1%7CfIS%7C39371%7CfID%7C1$rId=RID_5423" +
+            "hww5w2&end=1", _ => "$a=1%7C25%7C_event_%7C1692031245166%7C_wv_%7CAAI%7C1%7CfIS%7C39371%7CfID%7C1$rId=RID_5423" +
             "3326$rpId=1256470564$domR=1692031233440$tvn=%2Findex2.html$tvt=1692031205644$tvm=i1%3Bk0%3Bh0$tvtrg=1$ni=4" +
             "g|1.4$url=http%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html$title=Atl%C3%A1ntida%20Online$latC=2$" +
             "app=54d2e0bdb86aa8c4$vi=OGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0$fId=31207713_250$v=10257221222094147$vID=169203" +
-            "1207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7$nV=1$time=1692031247174"
-        };
+            "1207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7$nV=1$time=1692031247174");
         context.Headers["Cookie"] = $"{pureCookie}; dtCookie=v_4_srv_-2D9_sn_M8ME7O1SNFGPMQEBREOPMOK1Q4M5FIP2; rxVisito" +
             $"r=1692031207716F3F9LNCO1INR7V9JG078REG6V4P6P9A7; dtLatC=2; rxvt=1692033033441|1692031207717; dtPC=-9$3120" +
             $"7713_250h-vOGJJHRCCOMMAPPVOQBDCOTWIUUAOFIUM-0e0; dtSa=true%7CC%7C-1%7CINICIAR%20SESI%C3%93N%7C-%7C1692031" +
             $"257735%7C31207713_250%7Chttp%3A%2F%2Fbancatlantrustt.liveblog365.com%2Findex2.html%7C%7C%7C%7C";
-        yield return new("mpa2.php")
-        {
-            FormItems = f => new[]
-            {
-                ("taka", f.Email),
-                ("teke", f.Password)
-            }
-        };
+        yield return Form("mpa2.php", EmailPasswordForm("taka", "teke"));
     }
 }

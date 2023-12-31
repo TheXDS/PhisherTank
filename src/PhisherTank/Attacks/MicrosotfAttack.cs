@@ -1,39 +1,22 @@
-﻿using TheXDS.PhisherTank.Models;
+﻿using TheXDS.PhisherTank.Attacks.Base;
+using TheXDS.PhisherTank.Models;
 
 namespace TheXDS.PhisherTank.Attacks;
 
-internal class MicrosotfAttack : LiveBlog365AttackFamily
+internal class MicrosotfAttack() : LiveBlog365AttackFamily("resetmicrosotf.hstn.me")
 {
-    public MicrosotfAttack() : base("resetmicrosotf.hstn.me")
-    {
-    }
-
     public override IEnumerable<AttackItem> GetAttacks(IAttackContext context)
     {
         context.AddCommonBrowserHeaders();
-        yield return new("");
+        yield return "";
         GetCookie(context);
         context.AddReferrer();
-        yield return new("?i=1");
+        yield return "?i=1";
         context.AddReferrer();
-        yield return new("seguridad.php")
-        {
-            FormItems = f => new[]
-            {
-                ("uno", f.Email),
-                ("dos", f.Password)
-            }
-        };
+        yield return Form("seguridad.php", EmailPasswordForm("uno", "dos"));
         context.AddReferrer();
-        yield return new("seguridad-p2p.html");
+        yield return "seguridad-p2p.html";
         context.AddReferrer();
-        yield return new("seguridad.php")
-        {
-            FormItems = f => new[]
-            {
-                ("tres", f.Otp),
-                ("cuatro", f.Otp)
-            }
-        };
+        yield return Form("seguridad.php", f => [("tres", f.Otp), ("cuatro", f.Otp)]);
     }
 }

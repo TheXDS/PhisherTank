@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using TheXDS.MCART.Types.Extensions;
 using TheXDS.Triton.Faker;
 using static TheXDS.MCART.Types.Extensions.RandomExtensions;
@@ -12,6 +13,11 @@ internal class MiscFaker
     private static string[]? resolutions;
     private static Dictionary<string, string[]>? usRegions;
 
+    public static IPAddress RandomIp()
+    {
+        return new IPAddress(new byte[] { (byte)_rnd.Next(11,254), (byte)_rnd.Next(1, 254), (byte)_rnd.Next(1, 254), (byte)_rnd.Next(1, 254) });
+    }
+
     public static void SetDomains(params string[] domains)
     {
         fakeDomains = domains;
@@ -23,6 +29,7 @@ internal class MiscFaker
     {
         return ["hotmail.com", "hotmail.com", "live.com", "hotmail.com", "hotmail.com", "hotmail.es", "hotmail.com", "gmail.com", "gmail.com", "gmail.com", "gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "yahoo.com", "yahoo.com", "gmail.com", "yahoo.es",];
     }
+
     private static Dictionary<string, string[]> LoadUsRegions()
     {
         return new()
@@ -57,6 +64,11 @@ internal class MiscFaker
             {"Mississippi", [ "Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi" ] },
             {"Missouri", [ "Kansas City", "Saint Louis", "Springfield", "Independence", "Columbia" ] },
         };
+    }
+
+    public static string GetRandomUsCity()
+    {
+        return (usRegions ??= LoadUsRegions()).Values.SelectMany(p => p).ToArray().Pick();
     }
 
     public static Person GetFemale()

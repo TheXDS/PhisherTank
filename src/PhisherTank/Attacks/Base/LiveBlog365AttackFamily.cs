@@ -3,13 +3,10 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using TheXDS.PhisherTank.Models;
 
-namespace TheXDS.PhisherTank.Attacks;
+namespace TheXDS.PhisherTank.Attacks.Base;
 
-internal abstract class LiveBlog365AttackFamily : Attack
+internal abstract class LiveBlog365AttackFamily(string server) : Attack(server)
 {
-    protected LiveBlog365AttackFamily(string server) : base(server)
-    {
-    }
     private static byte[] ToBytes(string hex)
     {
         return Enumerable.Range(0, hex.Length).Where(x => x % 2 == 0).Select(x => Convert.ToByte(hex.Substring(x, 2), 16)).ToArray();

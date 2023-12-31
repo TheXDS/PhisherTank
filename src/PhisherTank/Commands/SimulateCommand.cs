@@ -97,7 +97,7 @@ internal class SimulateCommand : PhisherCommand
             
             Step {stepNumber}
             ===================
-            {(IsPost(item) ? "POST" : "GET")} /{item.Route}
+            {(IsPost(item, context) ? "POST" : "GET")} /{item.Route}
             {DumpRequest(item, context)}
             """);
         if (context.Headers.Count != 0)
@@ -116,24 +116,24 @@ internal class SimulateCommand : PhisherCommand
         return string.Join(Environment.NewLine, context.Headers.Select(p => $"{p.Key}: {p.Value}"));
     }
 
-    private static bool IsPost(AttackItem item)
+    private static bool IsPost(AttackItem item, IAttackContext context)
     {
-        return item.FormItems is not null || item.PlainData is not null;
+        return item.GetContent(context.Data) is not null;
     }
 
     private static string DumpRequest(AttackItem item, IAttackContext context)
     {
-        return (DumpFormItems(item, context) ?? item.PlainData?.Invoke(context.Data)) is { } str ? $"""
-            
-            Request data:
-            -------------------
-            {str}
-            """ : "";
-    }
-
-    private static string? DumpFormItems(AttackItem item, IAttackContext context)
-    {
-        if (item.FormItems is null) return null;
-        return string.Join(Environment.NewLine, item.FormItems.Invoke(context.Data).Select(p => $"{p.key}: {p.value}"));
+        using var ms = new MemoryStream();
+        if (item.GetContent(context.Data) is { } r)
+        {
+            r.ReadAsStream().CopyTo(ms);
+            return $"""
+                
+                Request data {r.GetType().Name}:
+                -------------------
+                {System.Text.Encoding.UTF8.GetString(ms.ToArray())}
+                """;
+        };
+        return "";
     }
 }

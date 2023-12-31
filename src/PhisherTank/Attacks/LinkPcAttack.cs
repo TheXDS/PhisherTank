@@ -3,81 +3,63 @@ using TheXDS.PhisherTank.Models;
 
 namespace TheXDS.PhisherTank.Attacks;
 
-internal class LinkPcAttack : Attack
+internal class LinkPcAttack() : Attack("appsingin-webserv.accesamznssmanaged.linkpc.net")
 {
-    public LinkPcAttack() : base("appsingin-webserv.accesamznssmanaged.linkpc.net")
+    private static (string, string)[] GetFullData(DataBase f)
     {
+        var usAddr = MiscFaker.GetUsaAddress();
+        return [
+            ("fullname", f.Person.Name.Replace(' ', '+')),
+            ("address", usAddr.AddressLine.Replace(' ', '+')),
+            ("cityp", usAddr.City.Split(',')[0].Replace(' ', '+')),
+            ("state", usAddr.City.Split(',')[1].Replace(' ', '+')),
+            ("zip", usAddr.Zip.ToString()),
+            ("phone", $"+1 ({MiscFaker.FakePin(3)}) {MiscFaker.FakePin(3)}-{MiscFaker.FakePin(4)}"),
+            ("dob", f.Person.Birth.ToString("MM/dd/yyyy")),
+            ("mmn", MiscFaker.GetFemale().Name)
+        ];
+    }
+
+    private static (string, string)[] GetCcInfo(DataBase f)
+    {
+        return [
+            ("ccn", f.CreditCard.Number),
+            ("expmonth", f.CreditCard.ExpMonth.ToString("00")),
+            ("expyear", f.CreditCard.ExpYear.ToString()),
+            ("cvv", f.CreditCard.CVV),
+        ];
+    }
+
+    private static (string, string)[] GetNewCcInfo(DataBase f)
+    {
+        var newCC = new CreditCard(f.Person);
+        return [
+            ("ccn1", newCC.Number),
+            ("expmonth", newCC.ExpMonth.ToString("00")),
+            ("expyear", newCC.ExpYear.ToString()),
+            ("cvv", newCC.CVV),
+        ];
+
     }
 
     public override IEnumerable<AttackItem> GetAttacks(IAttackContext context)
     {
         context.AddCommonBrowserHeaders();
-        yield return new("");
+        yield return "";
         AddCookie(context);
-        yield return new("sign");
-        yield return new("sign/process")
-        {
-            FormItems = f => new[]
-            {
-                ("screen", MiscFaker.RandomResolution()),
-                ("EML", f.Email),
-                ("PWD", f.Password)
-            }
-        };
+        yield return "sign";
+        yield return Form("sign/process", EmailPasswordForm("EML", "PWD", ("screen", MiscFaker.RandomResolution())));
         yield return GetForward(context);
         context.AddReferrer();
-        yield return new("activity/process");
+        yield return "activity/process";
         yield return GetForward(context);
-        yield return new("oauth/process")
-        {
-            FormItems = f => new[]
-            {
-                ("email", f.Email),
-                ("password", f.Password)
-            }
-        };
+        yield return Form("oauth/process", EmailPasswordForm("email", "password"));
         yield return GetForward(context);
-        var usAddr = MiscFaker.GetUsaAddress();
-        yield return new("billing/first")
-        {
-            FormItems = f => new[]
-            {
-                ("fullname", f.Person.Name.Replace(' ', '+')),
-                ("address", usAddr.AddressLine.Replace(' ', '+')),
-                ("cityp", usAddr.City.Split(',')[0].Replace(' ', '+')),
-                ("state", usAddr.City.Split(',')[1].Replace(' ', '+')),
-                ("zip", usAddr.Zip.ToString()),
-                ("phone", $"+1 ({MiscFaker.FakePin(3)}) {MiscFaker.FakePin(3)}-{MiscFaker.FakePin(4)}"),
-                ("dob", f.Person.Birth.ToString("MM/dd/yyyy")),
-                ("mmn", MiscFaker.GetFemale().Name)
-            }
-        };
-        yield return new("billing/process")
-        {
-            FormItems = f => new[]
-            {
-                ("ccn", f.CreditCard.Number),
-                ("expmonth", f.CreditCard.ExpMonth.ToString("00")),
-                ("expyear", f.CreditCard.ExpYear.ToString()),
-                ("cvv", f.CreditCard.CVV),
-            }
-        };
+        yield return Form("billing/first", GetFullData);
+        yield return Form("billing/process", GetCcInfo);
         yield return GetForward(context);
-        yield return new("billing/process")
-        {
-            FormItems = f =>
-            {
-                var newCC = new CreditCard(f.Person);
-                return new[]
-                {
-                    ("ccn1", newCC.Number),
-                    ("expmonth", newCC.ExpMonth.ToString("00")),
-                    ("expyear", newCC.ExpYear.ToString()),
-                    ("cvv", newCC.CVV),
-                };
-            }
-        };
+        yield return Form("billing/process", GetNewCcInfo);
         yield return GetForward(context);
-        yield return new("done/logout");
+        yield return "done/logout";
     }
 }

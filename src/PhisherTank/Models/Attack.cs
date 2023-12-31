@@ -25,6 +25,15 @@ internal abstract class Attack
         }
     }
 
+    protected static Func<DataBase, (string, string)[]> EmailPasswordForm(string emailField = "email", string passwordField = "password", params (string, string)[] extraFields)
+    {
+        return f => [
+            (emailField, f.Email),
+            (passwordField, f.Password),
+            .. extraFields
+        ];
+    }
+
     protected static AttackItem GetForward(IAttackContext context)
     {
         //HACK: Patch for forwarding simulation
@@ -32,5 +41,15 @@ internal abstract class Attack
 
         if (!((int)(context.LastResponse?.StatusCode ?? 0)).IsBetween(300, 399)) throw new Exception("Invalid redirect response");
         return new(context.LastResponse!.Headers.GetValues("Location").First());
+    }
+
+    protected static FormDataAttackItem Form(string route, Func<DataBase, (string, string)[]> contentBuilder)
+    {
+        return new(route, contentBuilder);
+    }
+
+    protected static RawDataAttackItem Raw(string route, Func<DataBase, string> contentBuilder)
+    {
+        return new(route, contentBuilder);
     }
 }
