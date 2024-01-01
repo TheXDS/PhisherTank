@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.Net;
 using TheXDS.MCART.Types.Extensions;
 using TheXDS.PhisherTank.Models;
 
@@ -6,7 +7,14 @@ namespace TheXDS.PhisherTank.Commands;
 
 internal class AttackCommand : PhisherCommand
 {
+    private record struct SpecialFailureCase(int Delay, string Message);
+
     private static volatile bool keepRunning = true;
+
+    private static readonly Dictionary<HttpStatusCode, SpecialFailureCase> specialFailureCases = new()
+    {
+        {HttpStatusCode.TooManyRequests, new (1800000, $"Too many request. Ratelimiting by 1800 seconds.")}
+    };
 
     public override Command GetCommand()
     {
@@ -92,6 +100,11 @@ internal class AttackCommand : PhisherCommand
         if (!context.Failed)
         {
             counter.Success();
+        }
+        else if (context.LastResponse?.StatusCode is { } c && specialFailureCases.TryGetValue(c, out var specialCase))
+        {
+            counter.Failure(specialCase.Message);
+            Thread.Sleep(specialCase.Delay);
         }
         else
         {
