@@ -6,6 +6,7 @@ namespace TheXDS.PhisherTank.Attacks;
 
 internal class TeteroProfeAttack : TelegramBotAttack
 {
+    //                                 👇 Yup... this API key is all yours to take.
     public TeteroProfeAttack() : base("6374298840:AAF5w92O0FwsDhcZ5JhEiTqIYuz4JJIiwBI", 5714389880)
     {
         MiscFaker.SetDomains("hotmail.com", "hotmail.com", "outlook.com", "hotmail.es", "hotmail.com");
