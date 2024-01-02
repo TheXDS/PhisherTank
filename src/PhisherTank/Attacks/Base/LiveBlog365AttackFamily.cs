@@ -41,12 +41,23 @@ internal abstract class LiveBlog365AttackFamily(string server) : Attack(server)
     protected static void GetCookie(IAttackContext context)
     {
         if (!(context.LastResponse is { } r)) return;
-        using var gz = new GZipStream(r.Content.ReadAsStream(), CompressionMode.Decompress);
-        using var sr = new StreamReader(gz);
-        var content = sr.ReadToEnd();
-        var a = ToBytes(Get('a', content));
-        var b = ToBytes(Get('b', content));
-        var c = ToBytes(Get('c', content));
-        context.Headers.Add("Cookie", $"__test={ToHex(Decrypt(c, a, b))}");
+        try
+        {
+            using var gz = new GZipStream(r.Content.ReadAsStream(), CompressionMode.Decompress);
+            using var sr = new StreamReader(gz);
+            var content = sr.ReadToEnd();
+            var a = ToBytes(Get('a', content));
+            var b = ToBytes(Get('b', content));
+            var c = ToBytes(Get('c', content));
+            context.Headers.Add("Cookie", $"__test={ToHex(Decrypt(c, a, b))}");
+        }
+        catch
+        {
+            /* Invalid Cookie stream. request may have returned a valid
+             * response, but it might not be an attack response (maybe a
+             * redirect for a phishing site blocked landing site?).
+             */
+            context.Failed = true;
+        }
     }
 }
