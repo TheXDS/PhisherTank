@@ -18,11 +18,11 @@ internal class AttackCommand : PhisherCommand
 
     public override Command GetCommand()
     {
-        var attackNameArg = (Argument<string>)CommonArguments["attackName"];
-        var attackDataOption = (Option<AttackData>)CommonOptions["data"];
-        var timeoutOption = new Option<int>(["--timeout", "-t"], () => 30, "Specifies the desired timeout for all requests, in seconds.");
+        var attackNameArg = GetArgument<string>("attackName");
+        var attackDataOption = GetOption<AttackData>("data");
+        var timeoutOption = GetOption<int>("timeout");
         var threadsOption = new Option<int>(["--threads", "-T"], () => Environment.ProcessorCount, "Specifies the number of attack threads to generate. Defualts to the number of available CPUs on the system.");
-        var httpsOption = new Option<bool>(["--https", "-s"], "Indicates that the attack must be executed using HTTPS requests.");
+        var httpsOption = GetOption<bool>("https");
         var attackCmd = new Command("attack", "Initiates a flooding attack.");
         attackCmd.AddArgument(attackNameArg);
         attackCmd.AddOption(timeoutOption);

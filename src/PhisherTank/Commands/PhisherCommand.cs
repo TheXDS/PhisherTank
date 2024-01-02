@@ -14,6 +14,15 @@ internal abstract class PhisherCommand
             .Select(p => p.GetCommand());
     }
 
+    protected static Option<T> GetOption<T>(string name)
+    {
+        return (Option<T>)CommonOptions[name];
+    }
+    protected static Argument<T> GetArgument<T>(string name)
+    {
+        return (Argument<T>)CommonArguments[name];
+    }
+
     protected static Dictionary<string, Argument> CommonArguments { get; } = [];
 
     protected static Dictionary<string, Option> CommonOptions { get; } = [];
@@ -24,6 +33,8 @@ internal abstract class PhisherCommand
     {
         CommonArguments.Add("attackName", new Argument<string>("attackName").FromAmong([.. KnownAttacks.Keys]));
         CommonOptions.Add("data", new Option<AttackData>(["--attack-data", "-d"], () => AttackData.Faux, "Specifies the kind of data to send."));
+        CommonOptions.Add("https", new Option<bool>(["--https", "-s"], "Indicates that the attack must be executed using HTTPS requests."));
+        CommonOptions.Add("timeout", new Option<int>(["--timeout", "-t"], () => 30, "Specifies the desired timeout for all requests, in seconds."));
     }
 
     public abstract Command GetCommand();
