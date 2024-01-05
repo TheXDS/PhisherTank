@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "PhisherTank": {
-      "commandName": "Project",
-      "commandLineArgs": "attack BacCredomaticCompras -s"
-    }
-  }
-}
