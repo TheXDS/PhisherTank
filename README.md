@@ -10,25 +10,77 @@ This tool came to be due to slow response from some hosting providers to stop su
 
 Because of the bespoke nature of some of these sites, attacks must be tailored and implemented specifically for the target.
 
-As of right now, there's two phishing sites supported.
-
-- PHP.Berangkat
-- PHP.liveblog365.A (Microsotf) (note the mispelling, there was another simmilar site with slight differences, but the site went down and silly me... I deleted the whole attack, but still. This is variant A)
-- PHP.liveblog365.B (Bancatlan) (slightly more advanced, pretends to be a Honduran Bank, includes some advanced telemetry libary to presumably, keep track of resources downloaded by victims)
-
-I came up with these names sort-of the same way an anti-virus company would come with theirs.
-
-I'll clean it up someday. I'll eventually add command line arguments to allow it to use a specific attack over an arbitrary URL, and setting up the timeouts, threads and some other values that I find useful.
+For a list of known phishing sites, go to [./src/PhisherTank/Attacks](https://github.com/TheXDS/PhisherTank/tree/main/src/PhisherTank/Attacks).
 
 Note: This tool is not intended to be used to execute DDoS attacks, and I will not condone it (unless it's used to bring down phishing sites). It's for you to look at, and maybe execute it for your own amusement.
 
 In the extremely unlike scenario that things like this tool become truly useful and important, consider leaving your star, and idk... helping me buy a coffee (I'll still need to set that up, GH sponsors does not work with banks here in my country)
 
+## Command-Line reference
+PhisherTank can be executed on any platform that supports `dotnet 8.0`. Take a look at the [Building prerequisites](#prerequisites) for more information on setting up your computer to run PhisherTank.
+
+When running Phishertank from a terminal, you need to specify a command and a set of arguments. For more information, run `./PhisherTank --help` in the binary output directory.
+
+### `attack` command
+This is the command you want to use to initiate an attack loop. It will continously send requests to the phishing site you specify in the arguments.
+
+The command is formatted as follows: `./PhisherTank attack <attackName> [options]` where: 
+ - `attackName`: One of the available attacks. See the [`list` command](#list-command) for more information on how to get a list of the available attacks.
+ - `options`: Set of options used to customize the attack as follows:
+
+Option       | Effect
+------------ | ------
+-t <timeout> | Specifies the desired timeout for all requests, in seconds. If not specified, the default value will be 30 seconds. An attack will mark an attempt as a failure after this timeout elapses.
+-T <threads> | Specifies the number of attack threads to generate. Defualts to the number of available CPUs on the system. Setting it higher allows for way more data to be sent to the phishing site, albeit it increases the chances of timing out (overloading the page).
+-s           | Forces the attack to use https. You'll likely need to specify this one on most phishing sites on the modern internet. I might change the default behavior of this flag later.
+-d <dataGen> | Specifies the kind of data to send. On the current distribution of PhisherTank, there's a few supported [data generators](#supported-data-generators).
+
+### `list` command
+This command will output a list of all attacks that PhisherTank has built-in. Currently, PhisherTank does not support external attack libraries nor user-defined attacks, but I might consider adding support for it soon.
+
+The command is formatted as follows: `./PhisherTank list` and will output something simmilar to this (as of 2024/02/02):
+```
+BacCredomaticCompras
+BacDappLinePm
+Bancatlan
+Berangkat
+DrexmHost
+LinkPc
+LiveDatePm
+PantheonSite
+Microsotf
+Serviciosonline202323
+TeteroProfe
+Webcindario
+```
+
+### `simulate` command
+Simulates a set of actions to be performed while executing an attack, writing a log of the steps that would have been performed to standard output. This way, you can see if the attack matches what a phishing site would be expecting.
+
+The command is formatted as follows: `./PhisherTank simulate <attackName>` where: 
+ - `attackName`: One of the available attacks. See the [`list` command](#list-command) for more information on how to get a list of the available attacks.
+
+### `try` command
+This command will execute a single attack workflow on the specified phishing site, and return a log of every step performed and whether or not it succeded. It's useful to determine if a phishing site might still be up, although some sites would not throw http errors if they're down, they'll just redirect to a landing site about the phishing site being blocked with a 2XX result... Including `POST` requests.
+
+The command is formatted as follows: `./PhisherTank simulate <attackName>` where: 
+ - `attackName`: One of the available attacks. See the [`list` command](#list-command) for more information on how to get a list of the available attacks.
+
+### Supported data generators
+Generator name | Description
+-------------- | -----------
+Faux           | This generator will create real-looking (yet false) data. Information will include a random person name, age, email, credit card info, etc. Phisical addresses would be generated for any country in the world using the american format, for ex. 123 Some road name, building 123, some city, country.
+Garbage        | This generator will fill all data fields with random characters from the entire unicode-16 table. You might see Kanji, emoji, ASCII control characters, odd symbols, etc.
+Test           | This generator will create "Test" data. All fields will be filled with "test" or ovbious test data.
+Truckload      | Same as `Garbage`, but including about 64 KB of random bytes per field.
+UsFaux         | Same as `Faux`, but restricting the physical address generation to US addresses. PhisherTank includes a small set of real US cities and states to use when generating this data.
+
 ## Building
 PhisherTank can be built on any platform or CI environment supported by dotnet.
 
 ### Prerequisites
-- [.Net SDK 6.0](https://dotnet.microsoft.com/) or higher.
+- Either [.Net SDK 8.0](https://dotnet.microsoft.com/) or a later version with net8.0 targeting packs. (for building)
+- [.Net Runtime 8.0](https://dotnet.microsoft.com/) if you only intend to run a pre-compiled version of PhisherTank (where would you get one is beyond me - I'm not distributing it as a compiled binary)
 
 ### Build PhisherTank
 ```sh
