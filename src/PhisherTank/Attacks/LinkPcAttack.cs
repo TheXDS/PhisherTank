@@ -39,7 +39,6 @@ internal class LinkPcAttack() : Attack("appsingin-webserv.accesamznssmanaged.lin
             ("expyear", newCC.ExpYear.ToString()),
             ("cvv", newCC.CVV),
         ];
-
     }
 
     public override IEnumerable<AttackItem> GetAttacks(IAttackContext context)
