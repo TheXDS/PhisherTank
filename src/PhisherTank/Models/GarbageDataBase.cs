@@ -27,8 +27,8 @@ public abstract class GarbageDataBase : DataBase
     private static string GetTrashEmail(int size)
     {
         static byte[] Get(int size) => Enumerable.Range(0, size).Select(_ => (byte)MiscFaker._rnd.Next(0, 0x100)).ToArray();
-        var u = Get(size / 2 - 2);
-        var p = Get(size / 2 - 3);
+        var u = Get((size / 2) - 2);
+        var p = Get((size / 2) - 3);
         return $"{Convert.ToBase64String(u)}@{Convert.ToBase64String(p)}.com";
     }
 }

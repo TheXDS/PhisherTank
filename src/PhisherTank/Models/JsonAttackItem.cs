@@ -1,18 +1,16 @@
-﻿using System.Net.Http.Json;
-
 namespace TheXDS.PhisherTank.Models;
 
-internal class JsonAttackItem<T>(string route, Func<DataBase, T> jsonData) : AttackItem(route)
+internal class JsonAttackItem(string route, Func<DataBase, string> stringData) : AttackItem(route)
 {
-    private readonly Func<DataBase, T> JsonData = jsonData;
+    private readonly Func<DataBase, string> stringData = stringData;
 
-    private static JsonContent FromJson(T data)
+    private static StringContent FromString(string rawData)
     {
-        return JsonContent.Create(data);
+        return new StringContent(rawData, System.Text.Encoding.UTF8, "application/json");
     }
 
     public override HttpContent? GetContent(DataBase context)
     {
-        return FromJson(JsonData.Invoke(context));
+        return FromString(stringData.Invoke(context));
     }
 }

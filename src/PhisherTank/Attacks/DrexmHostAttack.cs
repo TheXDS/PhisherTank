@@ -13,8 +13,8 @@ internal class DrexmHostAttack() : Attack("drexmhost.best")
         yield return Form("cargando.php", Get1);
         AddCookie(context);
         var smsPin = MiscFaker.FakePin(8);
-        yield return Form("gege.php", f => new[] { ("C1", smsPin) } );
-        yield return Form("gege.php", f => new[] { ("C2", smsPin) } );
+        yield return Form("gege.php", f => [("C1", smsPin)] );
+        yield return Form("gege.php", f => [("C2", smsPin)] );
         yield return Form("gege2.php", EmailPasswordForm("D1", "D2"));
     }
 

@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.IO.Compression;
 using TheXDS.MCART.Types.Extensions;
 using TheXDS.PhisherTank.Models;
 
@@ -13,15 +14,17 @@ internal class TryCommand : PhisherCommand
         var attackDataOpt = GetOption<AttackData>("data");
         var httpsOption = GetOption<bool>("https");
         var timeoutOption = GetOption<int>("timeout");
+        var dumpOption = new Option<bool>(["--dump"], "Enables server response dumping to stdout.");
         cmd.AddArgument(attackArg);
         cmd.AddOption(attackDataOpt);
         cmd.AddOption(httpsOption);
         cmd.AddOption(timeoutOption);
-        cmd.SetHandler(TryCommandHandler, attackArg, attackDataOpt, timeoutOption, httpsOption);
+        cmd.AddOption(dumpOption);
+        cmd.SetHandler(TryCommandHandler, attackArg, attackDataOpt, timeoutOption, httpsOption, dumpOption);
         return cmd;
     }
 
-    private async Task TryCommandHandler(string attackName, AttackData data, int timeout, bool https)
+    private async Task TryCommandHandler(string attackName, AttackData data, int timeout, bool https, bool dump)
     {
         if (!KnownAttacks.TryGetValue(attackName, out var attackType) || attackType.New<Attack>() is not { } attack)
         {
@@ -47,11 +50,16 @@ internal class TryCommand : PhisherCommand
             context.AddHeaders(request);
             try
             {
-                Console.WriteLine($"{request.Method.Method} /{request.RequestUri}...");
-                if ((context.LastResponse = await context.Client!.SendAsync(request, cts.Token).ConfigureAwait(false)) is not null && context.CheckResponse())
-                { 
-                    Console.WriteLine($"Attack step failed: {context.LastResponse.StatusCode}");
-                    return;
+                Console.Write($"{request.Method.Method} /{request.RequestUri}...");
+                context.LastResponse = await context.Client!.SendAsync(request, cts.Token).ConfigureAwait(false);
+                if (context.LastResponse is not null)
+                {
+                    await DumpAsync(context.LastResponse, dump);
+                    if (context.CheckResponse())
+                    {
+                        Console.WriteLine($"Attack step failed: {context.LastResponse.StatusCode}");
+                        return;
+                    }
                 }
             }
             catch (InvalidDataException)
@@ -80,5 +88,25 @@ internal class TryCommand : PhisherCommand
             }
         }
         Console.WriteLine("Phishing site is still up :(");
+    }
+
+    private async Task DumpAsync(HttpResponseMessage lastResponse, bool dump)
+    {
+        Console.WriteLine($"{lastResponse.StatusCode} (HTTP {(int)lastResponse.StatusCode})");
+        if (!dump) return;
+        Console.WriteLine("Response headers:");
+        foreach (var j in lastResponse.Headers){
+            Console.WriteLine($"{j.Key}: \"{string.Join("\"; \"", j.Value)}\"");
+        }
+        Console.WriteLine(new string('-', 40));
+        Console.WriteLine("Response content:");
+        var rs = await lastResponse.Content.ReadAsStreamAsync();
+        //if (lastResponse.Headers.Any(p => p.Value.First().Contains("gzip", StringComparison.CurrentCultureIgnoreCase))){
+            rs = new GZipStream(rs, CompressionMode.Decompress);
+        //}
+        using var sr = new StreamReader(rs);
+        Console.WriteLine(await sr.ReadToEndAsync());
+        Console.WriteLine(new string('-', 40));
+        rs.Dispose();
     }
 }
