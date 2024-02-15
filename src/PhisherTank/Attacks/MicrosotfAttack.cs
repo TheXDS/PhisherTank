@@ -12,6 +12,7 @@ internal class MicrosotfAttack() : LiveBlog365AttackFamily("resetmicrosotf.hstn.
         GetCookie(context);
         context.AddReferrer();
         yield return "?i=1";
+        context.CheckResponse("resetmicrosotf.hstn.me");
         context.AddReferrer();
         yield return Form("seguridad.php", EmailPasswordForm("uno", "dos"));
         context.AddReferrer();

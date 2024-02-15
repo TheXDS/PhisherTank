@@ -1,4 +1,6 @@
-﻿namespace TheXDS.PhisherTank.Models;
+﻿using TheXDS.MCART.Helpers;
+
+namespace TheXDS.PhisherTank.Models;
 
 internal static class IAttackContextExtensions
 {
@@ -41,9 +43,14 @@ internal static class IAttackContextExtensions
     public static bool CheckResponse(this IAttackContext context, string? expectedLocation = null)
     {
         context.Failed = context.LastResponse is { IsSuccessStatusCode: bool success } && !success;
-        if (expectedLocation is not null && context.LastResponse?.RequestMessage?.RequestUri is { Host: string u })
+        if (expectedLocation is not null && context is { Client: { }, LastResponse: { } })
         {
-            context.Failed |= u != expectedLocation;
+            HttpResponseMessage redir = context.LastResponse;
+            while (((int)redir.StatusCode).IsBetween(300, 399))
+            {
+                redir = context.Client.Send(new HttpRequestMessage(HttpMethod.Get, redir.Headers.GetValues("Location").First()));
+            }
+            context.Failed |= redir.RequestMessage!.RequestUri!.Host != expectedLocation;
         }
         return context.Failed;
     }
