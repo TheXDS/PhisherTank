@@ -9,7 +9,7 @@ internal class MicrosotfAttack() : LiveBlog365AttackFamily("resetmicrosotf.hstn.
     {
         context.AddCommonBrowserHeaders();
         yield return "";
-        GetCookie(context);
+        //GetCookie(context);
         context.AddReferrer();
         yield return "?i=1";
         context.CheckResponse("resetmicrosotf.hstn.me");
