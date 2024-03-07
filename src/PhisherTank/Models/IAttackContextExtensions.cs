@@ -42,15 +42,10 @@ internal static class IAttackContextExtensions
     /// <returns>A boolean value that indicates if the request has failed.</returns>
     public static bool CheckResponse(this IAttackContext context, string? expectedLocation = null)
     {
-        context.Failed = context.LastResponse is { IsSuccessStatusCode: bool success } && !success;
+        context.Failed = !(((int)(context.LastResponse?.StatusCode ?? 0)).IsBetween(300, 399) || (context.LastResponse is { IsSuccessStatusCode: bool success } && success));
         if (expectedLocation is not null && context is { Client: { }, LastResponse: { } })
         {
-            HttpResponseMessage redir = context.LastResponse;
-            while (((int)redir.StatusCode).IsBetween(300, 399))
-            {
-                redir = context.Client.Send(new HttpRequestMessage(HttpMethod.Get, redir.Headers.GetValues("Location").First()));
-            }
-            context.Failed |= redir.RequestMessage!.RequestUri!.Host != expectedLocation;
+            context.Failed |= !context.LastResponse?.Headers.GetValues("Location").FirstOrDefault()?.Contains(expectedLocation) ?? false;
         }
         return context.Failed;
     }

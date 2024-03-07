@@ -11,7 +11,7 @@ internal class AttackItem(string route = "")
         var content = GetContent(data);
         return new HttpRequestMessage(content is null ? HttpMethod.Get : HttpMethod.Post, Route)
         {
-            Content = content
+            Content = content,
         };
     }
 

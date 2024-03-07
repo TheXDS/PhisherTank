@@ -3,9 +3,9 @@ using TheXDS.PhisherTank.Models;
 
 namespace TheXDS.PhisherTank.Attacks;
 
-internal class WebcindarioAttack : Attack
+internal class HotSergu98Attack : Attack
 {
-    public WebcindarioAttack() : base("outlooklivehn.webcindario.com")
+    public HotSergu98Attack() : base("hotsergu98.webcindario.com")
     {
         MiscFaker.UseMicrosoftDomains();
     }
@@ -15,7 +15,7 @@ internal class WebcindarioAttack : Attack
         context.AddCommonBrowserHeaders();
         yield return "";
         AddCookie(context);
-        yield return Form("popeye.php", EmailPasswordForm("nm1", "nm2", ("namee", MiscFaker.FakePin())));
+        yield return Form("casillero.php", EmailPasswordForm("tlVVJNECrWGtadX", "mxLRLDLOWkkKsDR", ("texecAGnXtKJrMd", "Siguiente")));
         context.CheckResponse("outlook.live.com");
     }
 }

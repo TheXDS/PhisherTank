@@ -46,9 +46,11 @@ internal class AttackContext(DataBase data) : Disposable, IAttackContext
 
     private static HttpClient CreateClient(string server, Attack attack)
     {
-        return new HttpClient()
+
+        return new HttpClient(new HttpClientHandler() { AllowAutoRedirect = false })
         {
             BaseAddress = new Uri($"{attack.Scheme}://{server}/"),
             Timeout = TimeSpan.FromSeconds(attack.Timeout)
         };
-    }}
+    }
+}

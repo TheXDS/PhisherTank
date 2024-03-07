@@ -23,6 +23,11 @@ internal class MiscFaker
         fakeDomains = domains;
     }
 
+    public static void UseMicrosoftDomains()
+    {
+        SetDomains("hotmail.com", "hotmail.com", "outlook.com", "hotmail.es", "hotmail.com");
+    }
+
     public static IEnumerable<string> Domains => fakeDomains ?? [];
 
     private static string[] LoadDomains()

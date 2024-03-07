@@ -24,16 +24,18 @@ internal class AttackCommand : PhisherCommand
         var threadsOption = new Option<int>(["--threads", "-T"], () => Environment.ProcessorCount, "Specifies the number of attack threads to generate. Defualts to the number of available CPUs on the system.");
         var httpsOption = GetOption<bool>("https");
         var attackCmd = new Command("attack", "Initiates a flooding attack.");
+        var logLvlOption = new Option<LogLevel>(["--loglevel", "-l"], () => LogLevel.Detailed, "Specifies the desired log level for the attack.");
         attackCmd.AddArgument(attackNameArg);
         attackCmd.AddOption(timeoutOption);
         attackCmd.AddOption(threadsOption);
         attackCmd.AddOption(httpsOption);
         attackCmd.AddOption(attackDataOption);
-        attackCmd.SetHandler(AttackCommandHandler, attackNameArg, timeoutOption, threadsOption, httpsOption, attackDataOption);
+        attackCmd.AddOption(logLvlOption);
+        attackCmd.SetHandler(AttackCommandHandler, attackNameArg, timeoutOption, threadsOption, httpsOption, attackDataOption, logLvlOption);
         return attackCmd;
     }
 
-    private static Task AttackCommandHandler(string attackName, int timeout, int threads, bool https, AttackData attackData)
+    private static Task AttackCommandHandler(string attackName, int timeout, int threads, bool https, AttackData attackData, LogLevel logLvl)
     {
         if (!KnownAttacks.TryGetValue(attackName, out var attackType) || attackType.New<Attack>() is not { } attack)
         {
@@ -51,7 +53,7 @@ internal class AttackCommand : PhisherCommand
             cts.Cancel();
             Environment.Exit(0);
         };
-        return Task.WhenAll(attackThreads.Select(p => p.Task).Append(RefreshThread(attackThreads)));
+        return Task.WhenAll(attackThreads.Select(p => p.Task).Append(RefreshThread(attackThreads, logLvl)));
     }
 
     private static IEnumerable<AttackThread> CreateAttackThreads(Attack attack, int count, AttackData data, CancellationToken cancellationToken)
@@ -113,17 +115,19 @@ internal class AttackCommand : PhisherCommand
         }
     }
 
-    private static async Task RefreshThread(AttackThread[] threads)
+    private static async Task RefreshThread(AttackThread[] threads, LogLevel logLvl)
     {
         while (keepRunning)
         {
-            UpdateStatus(threads);
+            UpdateStatus(threads, logLvl);
             await Task.Delay(500);
         }
     }
 
-    private static void UpdateStatus(AttackThread[] threads)
+    private static void UpdateStatus(AttackThread[] threads, LogLevel logLvl)
     {
+        if (logLvl == LogLevel.Quiet) return;
+
         Console.Clear();
         Console.CursorTop = 1;
         Console.CursorLeft = 0;
@@ -131,11 +135,17 @@ internal class AttackCommand : PhisherCommand
         var f = 0;
         foreach (var (x, status) in threads)
         {
-            Console.WriteLine($"Task ID {x.Id} -> {status}");
+            if (logLvl.HasFlag(LogLevel.Threads))
+            {
+                Console.WriteLine($"Task ID {x.Id} -> {status}");
+            }
             s += status.SuccessCounter;
             f += status.FailureCounter;
         }
-        string rate = s + f > 0 ? $"{s * 100.0 / (s + f):f1}%" : "N/A";
-        Console.WriteLine($"Total -> Success: {s}, failures: {f} (success rate: {rate})");
+        if (logLvl.HasFlag(LogLevel.Summary))
+        {
+            string rate = s + f > 0 ? $"{s * 100.0 / (s + f):f1}%" : "N/A";
+            Console.WriteLine($"Total -> Success: {s}, failures: {f} (success rate: {rate})");
+        }
     }
 }
