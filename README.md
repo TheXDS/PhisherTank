@@ -34,7 +34,7 @@ Option           | Effect
 `-T <threads>`   | Specifies the number of attack threads to generate. Defaults to the number of available CPUs on the system. Setting it higher allows for way more data to be sent to the phishing site, albeit it increases the chances of timing out (overloading the page).
 `-s`             | Forces the attack to use https. You'll likely need to specify this one on most phishing sites on the modern internet. I might change the default behavior of this flag later.
 `-d <dataGen>`   | Specifies the kind of data to send. On the current distribution of PhisherTank, there's a few supported [data generators](#supported-data-generators).
-`-l <log level>` | Specifies a desired logging level (quiet|summary|threads|detailed). Defaults to `Detailed`.
+`-l <log level>` | Specifies a desired logging level (quiet\|summary\|threads\|detailed). Defaults to `Detailed`.
 
 ### `list` command
 This command will output a list of all attacks that PhisherTank has built-in. Currently, PhisherTank does not support external attack libraries nor user-defined attacks, but I might consider adding support for it soon.
