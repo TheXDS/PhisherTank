@@ -3,9 +3,9 @@ using TheXDS.PhisherTank.Models;
 
 namespace TheXDS.PhisherTank.Attacks;
 
-internal class HotSergu98Attack : Attack
+internal class HotSergu99Attack : Attack
 {
-    public HotSergu98Attack() : base("hotsergu98.webcindario.com")
+    public HotSergu99Attack() : base("hotsergu99.webcindario.com")
     {
         MiscFaker.UseMicrosoftDomains();
     }
