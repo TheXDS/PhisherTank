@@ -22,6 +22,7 @@ internal class AttackCommand : PhisherCommand
         var attackDataOption = GetOption<AttackData>("data");
         var timeoutOption = GetOption<int>("timeout");
         var threadsOption = new Option<int>(["--threads", "-T"], () => Environment.ProcessorCount, "Specifies the number of attack threads to generate. Defualts to the number of available CPUs on the system.");
+        var pauseOption = new Option<int>(["--pause", "-p"], () => 0, "If specified, adds a delay between each attack cycle.");
         var httpsOption = GetOption<bool>("https");
         var attackCmd = new Command("attack", "Initiates a flooding attack.");
         var logLvlOption = new Option<LogLevel>(["--loglevel", "-l"], () => LogLevel.Detailed, "Specifies the desired log level for the attack.");
@@ -31,11 +32,12 @@ internal class AttackCommand : PhisherCommand
         attackCmd.AddOption(httpsOption);
         attackCmd.AddOption(attackDataOption);
         attackCmd.AddOption(logLvlOption);
-        attackCmd.SetHandler(AttackCommandHandler, attackNameArg, timeoutOption, threadsOption, httpsOption, attackDataOption, logLvlOption);
+        attackCmd.AddOption(pauseOption);
+        attackCmd.SetHandler(AttackCommandHandler, attackNameArg, timeoutOption, threadsOption, httpsOption, attackDataOption, logLvlOption, pauseOption);
         return attackCmd;
     }
 
-    private static Task AttackCommandHandler(string attackName, int timeout, int threads, bool https, AttackData attackData, LogLevel logLvl)
+    private static Task AttackCommandHandler(string attackName, int timeout, int threads, bool https, AttackData attackData, LogLevel logLvl, int pause)
     {
         if (!KnownAttacks.TryGetValue(attackName, out var attackType) || attackType.New<Attack>() is not { } attack)
         {
@@ -45,7 +47,7 @@ internal class AttackCommand : PhisherCommand
         attack.Timeout = timeout;
 
         CancellationTokenSource cts = new();
-        var attackThreads = CreateAttackThreads(attack, threads, attackData, cts.Token).ToArray();
+        var attackThreads = CreateAttackThreads(attack, threads, attackData, cts.Token, pause).ToArray();
         Console.CancelKeyPress += (_, __) =>
         {
             Console.WriteLine("Stopping...");
@@ -56,24 +58,25 @@ internal class AttackCommand : PhisherCommand
         return Task.WhenAll(attackThreads.Select(p => p.Task).Append(RefreshThread(attackThreads, logLvl)));
     }
 
-    private static IEnumerable<AttackThread> CreateAttackThreads(Attack attack, int count, AttackData data, CancellationToken cancellationToken)
+    private static IEnumerable<AttackThread> CreateAttackThreads(Attack attack, int count, AttackData data, CancellationToken cancellationToken, int pause)
     {
         var c = count;
         while (c > 0)
         {
             var counter = new Status() { Name = $"{attack.GetType().Name}-{(count - c).ToString(new string('0', count.ToString().Length))}" };
-            yield return new(Spam(counter, attack, data, cancellationToken), counter);
+            yield return new(Spam(counter, attack, data, cancellationToken, pause), counter);
             c--;
         }
     }
 
-    private static async Task Spam(Status counter, Attack attack, AttackData data, CancellationToken cancellationToken)
+    private static async Task Spam(Status counter, Attack attack, AttackData data, CancellationToken cancellationToken, int pause)
     {
         while (keepRunning)
         {
             try
             {
                 await RunAttack(attack, counter, data, cancellationToken);
+                if (pause > 0) await Task.Delay(pause);                
             }
             catch (Exception ex)
             {
