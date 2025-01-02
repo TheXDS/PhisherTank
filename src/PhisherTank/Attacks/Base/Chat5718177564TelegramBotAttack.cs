@@ -1,11 +1,10 @@
 using TheXDS.PhisherTank.Component;
 using TheXDS.PhisherTank.Models;
-using TheXDS.PhisherTank.Attacks.Base;
 using TheXDS.MCART.Types.Extensions;
 
 namespace TheXDS.PhisherTank.Attacks.Base;
 
-internal class Chat5718177564TelegramBotAttack : TelegramBotAttack
+internal abstract class Chat5718177564TelegramBotAttack : TelegramBotAttack
 {
     private readonly string asshole;
 
