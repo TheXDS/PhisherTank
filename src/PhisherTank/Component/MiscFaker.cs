@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Globalization;
+using System.Net;
 using System.Text;
 using TheXDS.MCART.Types.Extensions;
 using TheXDS.Triton.Faker;
@@ -15,7 +16,7 @@ internal class MiscFaker
 
     public static IPAddress RandomIp()
     {
-        return new IPAddress(new byte[] { (byte)_rnd.Next(11,254), (byte)_rnd.Next(1, 254), (byte)_rnd.Next(1, 254), (byte)_rnd.Next(1, 254) });
+        return new IPAddress([(byte)_rnd.Next(11,254), (byte)_rnd.Next(1, 254), (byte)_rnd.Next(1, 254), (byte)_rnd.Next(1, 254)]);
     }
 
     public static void SetDomains(params string[] domains)
@@ -68,6 +69,27 @@ internal class MiscFaker
             {"Minnesota", [ "Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington" ] },
             {"Mississippi", [ "Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi" ] },
             {"Missouri", [ "Kansas City", "Saint Louis", "Springfield", "Independence", "Columbia" ] },
+            {"Montana", [ "Billings", "Missoula", "Great Falls", "Bozeman", "Butte" ] },
+            {"Nebraska", [ "Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney" ] },
+            {"Nevada", [ "Las Vegas", "Henderson", "Reno", "North Las Vegas", "Sparks" ] },
+            {"New Hampshire", [ "Manchester", "Nashua", "Concord", "Derry", "Dover" ] },
+            {"New Jersey", [ "Newark", "Jersey City", "Paterson", "Elizabeth", "Edison" ] },
+            {"New Mexico", [ "Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell" ] },
+            {"New York", [ "New York City", "Buffalo", "Rochester", "Yonkers", "Syracuse" ] },
+            {"Ohio", [ "Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron" ] },
+            {"Oklahoma", [ "Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Lawton" ] },
+            {"Oregon", [ "Portland", "Salem", "Eugene", "Gresham", "Hillsboro" ] },
+            {"Pennsylvania", [ "Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading" ] },
+            {"Rhode Island", [ "Providence", "Warwick", "Cranston", "Pawtucket", "East Providence" ] },
+            {"Tennessee", [ "Nashville", "Memphis", "Knoxville", "Chattanooga", "Clarksville" ] },
+            {"Texas", [ "Houston", "San Antonio", "Dallas", "Austin", "Fort Worth" ] },
+            {"Utah", [ "Salt Lake City", "West Valley City", "Provo", "West Jordan", "Orem" ] },
+            {"Vermont", [ "Burlington", "South Burlington", "Rutland", "Barre", "Montpelier" ] },
+            {"Virginia", [ "Virginia Beach", "Norfolk", "Chesapeake", "Richmond", "Newport News" ] },
+            {"Washington", [ "Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue" ] },
+            {"West Virginia", [ "Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling" ] },
+            {"Wisconsin", [ "Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine" ] },
+            {"Wyoming", [ "Cheyenne", "Casper", "Laramie", "Gillette", "Rock Springs" ] }
         };
     }
 
@@ -156,5 +178,21 @@ internal class MiscFaker
             length--;
         }
         return sb.ToString();
+    }
+
+    public static string RandomChars(int length)
+    {
+        const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        var stringChars = new char[length];
+        for (int i = 0; i < stringChars.Length; i++)
+        {
+            stringChars[i] = chars[_rnd.Next(chars.Length)];
+        }
+        return new string(stringChars);
+    }
+
+    public static string Random2LetterCountry()
+    {
+        return new RegionInfo(CultureInfo.GetCultures(CultureTypes.SpecificCultures).Pick().Name).TwoLetterISORegionName;
     }
 }

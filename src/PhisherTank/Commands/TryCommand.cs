@@ -54,7 +54,8 @@ internal class TryCommand : PhisherCommand
                 context.LastResponse = await context.Client!.SendAsync(request, cts.Token).ConfigureAwait(false);
                 if (context.LastResponse is not null)
                 {
-                    await DumpAsync(context.LastResponse, dump);
+                    
+                    Dump(context, dump);
                     if (context.CheckResponse())
                     {
                         Console.WriteLine($"Attack step failed: {context.LastResponse.StatusCode}");
@@ -90,23 +91,17 @@ internal class TryCommand : PhisherCommand
         Console.WriteLine("Phishing site is still up :(");
     }
 
-    private async Task DumpAsync(HttpResponseMessage lastResponse, bool dump)
+    private void Dump(IAttackContext context, bool dump)
     {
-        Console.WriteLine($"{lastResponse.StatusCode} (HTTP {(int)lastResponse.StatusCode})");
+        Console.WriteLine($"{context.LastResponse!.StatusCode} (HTTP {(int)context.LastResponse!.StatusCode})");
         if (!dump) return;
         Console.WriteLine("Response headers:");
-        foreach (var j in lastResponse.Headers){
+        foreach (var j in context.LastResponse!.Headers){
             Console.WriteLine($"{j.Key}: \"{string.Join("\"; \"", j.Value)}\"");
         }
         Console.WriteLine(new string('-', 40));
-        Console.WriteLine("Response content:");
-        var rs = await lastResponse.Content.ReadAsStreamAsync();
-        //if (lastResponse.Headers.Any(p => p.Value.First().Contains("gzip", StringComparison.CurrentCultureIgnoreCase))){
-            rs = new GZipStream(rs, CompressionMode.Decompress);
-        //}
-        using var sr = new StreamReader(rs);
-        Console.WriteLine(await sr.ReadToEndAsync());
+        Console.WriteLine("Response content:");        
+        Console.WriteLine(context.LastResponseContent);
         Console.WriteLine(new string('-', 40));
-        rs.Dispose();
     }
 }

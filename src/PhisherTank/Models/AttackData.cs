@@ -6,5 +6,5 @@ public enum AttackData : byte
     UsFaux,
     Garbage,
     Truckload,
-    Test
+    Test,
 }

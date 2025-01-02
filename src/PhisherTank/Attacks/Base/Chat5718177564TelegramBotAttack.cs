@@ -3,7 +3,7 @@ using TheXDS.PhisherTank.Models;
 using TheXDS.PhisherTank.Attacks.Base;
 using TheXDS.MCART.Types.Extensions;
 
-namespace TheXDS.PhisherTank.Attacks;
+namespace TheXDS.PhisherTank.Attacks.Base;
 
 internal class Chat5718177564TelegramBotAttack : TelegramBotAttack
 {

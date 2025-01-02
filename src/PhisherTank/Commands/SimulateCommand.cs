@@ -21,6 +21,8 @@ internal class SimulateCommand : PhisherCommand
 
         public HttpClient? Client { get => null; set { } }
 
+        public string? LastResponseContent => null;
+
         public void SwitchServer(string newServer, Attack attack)
         {
             Console.WriteLine($" -- Attack would have switched to host '{newServer}'");
@@ -34,6 +36,7 @@ internal class SimulateCommand : PhisherCommand
     public override Command GetCommand()
     {
         var simulateCmd = new Command("simulate", "Simulates a set of actions to be performed while executing an attack.");
+        simulateCmd.AddAlias("sim");
         var attackArg = (Argument<string>)CommonArguments["attackName"];
         var attackDataOpt = (Option<AttackData>)CommonOptions["data"];
         simulateCmd.AddArgument(attackArg);

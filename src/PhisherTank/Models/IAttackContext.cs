@@ -4,6 +4,8 @@ internal interface IAttackContext : IDisposable
 {
     HttpResponseMessage? LastResponse { get; }
 
+    string? LastResponseContent { get; }
+
     Dictionary<string, string> Headers { get; }
 
     DataBase Data { get; }

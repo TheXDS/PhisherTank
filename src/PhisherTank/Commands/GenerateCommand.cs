@@ -11,6 +11,7 @@ internal class GenerateCommand : PhisherCommand
     public override Command GetCommand()
     {
         var generateCmd = new Command("generate", "Generates a set of data entries that can be sent to an attacker.");
+        generateCmd.AddAlias("gen");
         var countArg = new Argument<int>("count", () => 1, "Number of entries to generate.");
         var attackDataOption = (Option<AttackData>)CommonOptions["data"];
         generateCmd.AddArgument(countArg);

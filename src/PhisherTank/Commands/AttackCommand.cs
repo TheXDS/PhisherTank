@@ -25,6 +25,7 @@ internal class AttackCommand : PhisherCommand
         var pauseOption = new Option<int>(["--pause", "-p"], () => 0, "If specified, adds a delay between each attack cycle.");
         var httpsOption = GetOption<bool>("https");
         var attackCmd = new Command("attack", "Initiates a flooding attack.");
+        attackCmd.AddAlias("atk");
         var logLvlOption = new Option<LogLevel>(["--loglevel", "-l"], () => LogLevel.Detailed, "Specifies the desired log level for the attack.");
         attackCmd.AddArgument(attackNameArg);
         attackCmd.AddOption(timeoutOption);

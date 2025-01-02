@@ -1,10 +1,12 @@
-﻿using TheXDS.MCART.Types.Base;
+﻿using System.IO.Compression;
+using TheXDS.MCART.Types.Base;
 
 namespace TheXDS.PhisherTank.Models;
 
 internal class AttackContext(DataBase data) : Disposable, IAttackContext
 {
     private HttpResponseMessage? lastResponse;
+    private string? _lastResponseContent;
 
     public HttpResponseMessage? LastResponse
     {
@@ -13,8 +15,21 @@ internal class AttackContext(DataBase data) : Disposable, IAttackContext
         {
             LastResponse?.Dispose();
             lastResponse = value;
+
+            try
+            {
+                using var rs = new GZipStream(value!.Content.ReadAsStream(), CompressionMode.Decompress);
+                using var sr = new StreamReader(rs);
+                _lastResponseContent = sr.ReadToEnd();
+            }
+            catch
+            {
+                _lastResponseContent = value?.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            }
         }
     }
+
+    public string? LastResponseContent => _lastResponseContent;
 
     public Dictionary<string, string> Headers { get; } = [];
 
