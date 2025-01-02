@@ -17,9 +17,11 @@ Note: This tool is not intended to be used to execute DDoS attacks, and I will n
 In the extremely unlike scenario that things like this tool become truly useful and important, consider leaving your star, and idk... helping me [buy a coffee](https://ko-fi.com/W7W415UCHY) perhaps.
 
 ## Command-Line reference
-PhisherTank can be executed on any platform that supports `dotnet 8.0`. Take a look at the [Building prerequisites](#prerequisites) for more information on setting up your computer to run PhisherTank.
+PhisherTank can be executed on any platform that supports `dotnet 8.0`. Take a look at the [Building prerequisites](#prerequisites) section for more information on setting up your computer to run PhisherTank.
 
 When running Phishertank from a terminal, you need to specify a command and a set of arguments. For more information, run `./PhisherTank --help` in the binary output directory.
+
+> Note: Linux is known to not like executing dotnet apps that much. If you cannot directly execute `PhisherTank`, try with `dotnet <path-to-PhisherTank>.dll`
 
 ### `attack` command
 This is the command you want to use to initiate an attack loop. It will continously send requests to the phishing site you specify in the arguments.
@@ -28,36 +30,50 @@ The command is formatted as follows: `./PhisherTank attack <attackName> [options
  - `attackName`: One of the available attacks. See the [`list` command](#list-command) for more information on how to get a list of available attacks.
  - `options`: Set of options used to customize the attack as follows:
 
-Option           | Effect
----------------- | ------
-`-t <timeout>`   | Specifies the desired timeout for all requests, in seconds. If not specified, the default value will be 30 seconds. An attack will mark an attempt as a failure after this timeout elapses.
-`-T <threads>`   | Specifies the number of attack threads to generate. Defaults to the number of available CPUs on the system. Setting it higher allows for way more data to be sent to the phishing site, albeit it increases the chances of timing out (overloading the page).
-`-s`             | Forces the attack to use https. You'll likely need to specify this one on most phishing sites on the modern internet. I might change the default behavior of this flag later.
-`-d <dataGen>`   | Specifies the kind of data to send. On the current distribution of PhisherTank, there's a few supported [data generators](#supported-data-generators).
-`-l <log level>` | Specifies a desired logging level (quiet\|summary\|threads\|detailed). Defaults to `Detailed`.
+Option              | Effect
+------------------- | ------
+`-t <timeout>`      | Specifies the desired timeout for all requests, in seconds. If not specified, the default value will be 30 seconds. An attack will mark an attempt as a failure after this timeout elapses.
+`-T <threads>`      | Specifies the number of attack threads to generate. Defaults to the number of available CPUs on the system. Setting it higher allows for way more data to be sent to the phishing site, albeit it increases the chances of timing out (overloading the page).
+`-s`                | Forces the attack to use https. You'll likely need to specify this one on most phishing sites on the modern internet. I might change the default behavior of this flag later.
+`-d <dataGen>`      | Specifies the kind of data to send. On the current distribution of PhisherTank, there's a few supported [data generators](#supported-data-generators).
+`-l <log level>`    | Specifies a desired logging level (quiet\|summary\|threads\|detailed). Defaults to `Detailed`.
+`-p <milliseconds>` | Introduces a pause after each attack cycle to help prevent hitting an API ratelimit (useful for Telegram-based attacks)
 
 ### `list` command
 This command will output a list of all attacks that PhisherTank has built-in. Currently, PhisherTank does not support external attack libraries nor user-defined attacks, but I might consider adding support for it soon.
 
-The command is formatted as follows: `./PhisherTank list` and will output something simmilar to this (as of 2024/03/07):
+The command is formatted as follows: `./PhisherTank list` and will output something simmilar to this (as of 2025-01-01):
 ```
 BacCredomaticCompras
 BacDappLinePm
 Bancatlan
 Berangkat
+CelebratorsPk
+ComunicadoSeguridad
 DrexmHost
+Gugumenclok
+HotSegut93040
+HotSergu99
+KucingManis
 LinkPc
 LiveDatePm
-PantheonSite
+LkjgljerfWebcindario
 Microsotf
+NewHome106365
+PantheonSite
+Sacrix32
 Serviciosonline202323
 TeteroProfe
+Verificarmsnza
+Verificxar1
+Verificxar2
 Webcindario
-HotSergu98
 ```
 
 ### `simulate` command
 Simulates a set of actions to be performed while executing an attack, writing a log of the steps that would have been performed to standard output. This way, you can see if the attack matches what a phishing site would be expecting.
+
+> Note: some steps, like API authentication or response analysis could prevent a simulation to be completed. In this case, the simulation will be truncated.
 
 The command is formatted as follows: `./PhisherTank simulate <attackName>` where: 
  - `attackName`: One of the available attacks. See the [`list` command](#list-command) for more information on how to get a list of available attacks.
@@ -65,14 +81,14 @@ The command is formatted as follows: `./PhisherTank simulate <attackName>` where
 ### `try` command
 This command will execute a single attack workflow on the specified phishing site, and return a log of every step performed and whether or not it succeded. It's useful to determine if a phishing site might still be up, although some sites would not throw http errors if they're down, they'll just redirect to a landing site about the phishing site being blocked with a 3XX result... Including `POST` requests.
 
-The command is formatted as follows: `./PhisherTank simulate <attackName>` where: 
+The command is formatted as follows: `./PhisherTank try <attackName>` where: 
  - `attackName`: One of the available attacks. See the [`list` command](#list-command) for more information on how to get a list of available attacks.
 
 ### Supported data generators
 Generator name | Description
 -------------- | -----------
 Faux           | This generator will create real-looking (yet false) data. Information will include a random person name, age, email, credit card info, etc. Phisical addresses would be generated for any country in the world using the american format, for ex. 123 Some road name, building 123, some city, country.
-Garbage        | This generator will fill all data fields with random characters from the entire Unicode-16 table. You might see Kanji, emoji, ASCII control characters, odd symbols, etc.
+Garbage        | This generator will fill all data fields with random characters from the entire UTF-16 table, including undefined characters. You might see Kanji, emoji, ASCII control characters, odd symbols, etc.
 Test           | This generator will create "Test" data. All fields will be filled with "test" or ovbious test data.
 Truckload      | Same as `Garbage`, but including about 64 KB of random bytes per field. Why 64 KB? It's large enough to cause trouble on SQL databases where a field may have a limited size, and small enough that most requests should not fail due to their size.
 UsFaux         | Same as `Faux`, but restricting the physical address generation to US addresses. PhisherTank includes a small set of real US cities and states to use when generating this data to make it a bit more believable.
