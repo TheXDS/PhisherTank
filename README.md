@@ -14,7 +14,7 @@ For a list of known phishing sites, go to [./src/PhisherTank/Attacks](https://gi
 
 Note: This tool is not intended to be used to execute DDoS attacks, and I will not condone it (unless it's used to bring down phishing sites). It's for you to look at, and maybe execute it for your own amusement.
 
-In the extremely unlike scenario that things like this tool become truly useful and important, consider leaving your star, and idk... helping me [buy a coffee](https://www.buymeacoffee.com/xdsxpsivx) perhaps.
+In the extremely unlike scenario that things like this tool become truly useful and important, consider leaving your star, and idk... helping me [buy a coffee](https://ko-fi.com/W7W415UCHY) perhaps.
 
 ## Command-Line reference
 PhisherTank can be executed on any platform that supports `dotnet 8.0`. Take a look at the [Building prerequisites](#prerequisites) for more information on setting up your computer to run PhisherTank.
