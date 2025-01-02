@@ -23,6 +23,8 @@ internal class SimulateCommand : PhisherCommand
 
         public string? LastResponseContent => null;
 
+        public string? CustomFailureMessage { get; set; }
+
         public void SwitchServer(string newServer, Attack attack)
         {
             Console.WriteLine($" -- Attack would have switched to host '{newServer}'");
@@ -68,7 +70,7 @@ internal class SimulateCommand : PhisherCommand
 
     private static IEnumerable<(int, AttackItem)> SafeEnumerate(Attack attack, IAttackContext context)
     {
-        bool TryMoveNext(IEnumerator<(int, AttackItem)> e)
+        static bool TryMoveNext(IEnumerator<(int, AttackItem)> e)
         {
             try
             {
@@ -96,6 +98,18 @@ internal class SimulateCommand : PhisherCommand
 
     private static void ShowAttackItemInfo(int stepNumber, AttackItem item, IAttackContext context)
     {
+        if (context.Failed)
+        {
+            context.Failed = false;
+            Console.WriteLine($"""
+            
+            -------------------
+            /!\ Simulation message: {context.CustomFailureMessage} <- This is a simulation, the attack has not failed.
+
+            The previous step may have generated data required for further setup of the attack pipeline, like API authentication.
+            -------------------
+            """);
+        }
         Console.WriteLine($"""
             
             Step {stepNumber}

@@ -13,11 +13,19 @@ internal abstract class GoogleFirebaseAttack(string appId, string dbName, string
 
     private static FirebaseToken Authenticate(IAttackContext context)
     {
-        using var br = new StreamReader(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(context.LastResponseContent!)));
-        _ = br.ReadLine();
-        var header = context.LastResponse!.Headers.TryGetValues("X-HTTP-Session-Id", out var x) ? x.First() : "";
-        var header2 = br.ReadLine()!.Remove(0, 10).Remove(22);
-        return new FirebaseToken(header, header2);
+        try
+        {
+            using var br = new StreamReader(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(context.LastResponseContent!)));
+            _ = br.ReadLine();
+            var header = context.LastResponse!.Headers.TryGetValues("X-HTTP-Session-Id", out var x) ? x.First() : "";
+            var header2 = br.ReadLine()!.Remove(0, 10).Remove(22);
+            return new FirebaseToken(header, header2);
+        }
+        catch
+        {
+            context.Fail("Failed to authenticate");
+            return new("gsessionid", "");
+        }
     }
 
     private string GetUrl(FirebaseToken token, string action, params string[] extraparams)

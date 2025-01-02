@@ -46,6 +46,8 @@ internal class AttackContext(DataBase data) : Disposable, IAttackContext
     public DataBase Data { get; } = data;
 
     public HttpClient? Client { get; set; }
+    
+    public string? CustomFailureMessage { get; set; }
 
     protected override void OnDispose()
     {

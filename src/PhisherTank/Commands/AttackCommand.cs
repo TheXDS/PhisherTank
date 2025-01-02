@@ -77,7 +77,7 @@ internal class AttackCommand : PhisherCommand
             try
             {
                 await RunAttack(attack, counter, data, cancellationToken);
-                if (pause > 0) await Task.Delay(pause);                
+                if (pause > 0) await Task.Delay(pause);
             }
             catch (Exception ex)
             {
@@ -93,6 +93,7 @@ internal class AttackCommand : PhisherCommand
         context.SwitchServer(attack.Server, attack);
         foreach (var item in attack.GetAttacks(context))
         {
+            if (context.Failed) break;            
             using var request = item.NewRequest(context.Data);
             context.AddHeaders(request);
             context.LastResponse = await context.Client!.SendAsync(request, cancellationToken).ConfigureAwait(false);
@@ -114,7 +115,7 @@ internal class AttackCommand : PhisherCommand
         }
         else
         {
-            counter.Failure($"{context.LastResponse?.ReasonPhrase ?? context.LastResponse?.StatusCode.ToString() ?? "Invalid attack"} on {context.LastResponse?.RequestMessage?.RequestUri?.ToString() ?? "<Unknown>"}");
+            counter.Failure($"{context.CustomFailureMessage ?? context.LastResponse?.ReasonPhrase ?? context.LastResponse?.StatusCode.ToString() ?? "Invalid attack"} on {context.LastResponse?.RequestMessage?.RequestUri?.ToString() ?? "<Unknown>"}");
             Thread.Sleep(2000);
         }
     }
