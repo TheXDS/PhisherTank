@@ -54,7 +54,6 @@ internal class TryCommand : PhisherCommand
                 context.LastResponse = await context.Client!.SendAsync(request, cts.Token).ConfigureAwait(false);
                 if (context.LastResponse is not null)
                 {
-                    
                     Dump(context, dump);
                     if (context.CheckResponse())
                     {
