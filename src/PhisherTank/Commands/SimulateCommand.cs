@@ -136,7 +136,7 @@ internal class SimulateCommand : PhisherCommand
                 -------------------
                 {System.Text.Encoding.UTF8.GetString(ms.ToArray())}
                 """;
-        };
+        }
         return "";
     }
 }

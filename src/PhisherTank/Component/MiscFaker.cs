@@ -160,7 +160,12 @@ internal class MiscFaker
         var baseAddress = Address.NewAddress();
         var state = (usRegions ??= LoadUsRegions()).Keys.Pick();
         var city = usRegions[state].Pick();
-        return new Address(baseAddress.AddressLine, baseAddress.AddressLine2, $"{city}, {state}", $"United States{(allowUsWriteVariance && _rnd.CoinFlip() || defaultToLongName ? " of America" : "")}", int.Parse(FakePin(5)));
+        return new Address(
+            baseAddress.AddressLine,
+            baseAddress.AddressLine2,
+            $"{city}, {state}",
+            $"United States{((allowUsWriteVariance && _rnd.CoinFlip()) || defaultToLongName ? " of America" : "")}",
+            int.Parse(FakePin(5)));
     }
 
     public static DateTime RandomDateTime()
