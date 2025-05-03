@@ -13,7 +13,7 @@ internal class AttackCommand : PhisherCommand
 
     private static readonly Dictionary<HttpStatusCode, SpecialFailureCase> specialFailureCases = new()
     {
-        {HttpStatusCode.TooManyRequests, new (1800000, $"Too many request. Ratelimiting by 1800 seconds.")}
+        {HttpStatusCode.TooManyRequests, new (1800000, "Too many request. Ratelimiting by {0} seconds.")}
     };
 
     public override Command GetCommand()
@@ -23,6 +23,7 @@ internal class AttackCommand : PhisherCommand
         var timeoutOption = GetOption<int>("timeout");
         var threadsOption = new Option<int>(["--threads", "-T"], () => Environment.ProcessorCount, "Specifies the number of attack threads to generate. Defualts to the number of available CPUs on the system.");
         var pauseOption = new Option<int>(["--pause", "-p"], () => 0, "If specified, adds a delay between each attack cycle.");
+        var rateLimitOption = new Option<int>(["--ratelimit", "-r"], () => 1800, "Specifies the number of seconds to wait between failing attack cycles after a status code of HTTP 429 is received. Defaults to 1800 seconds (30 minutes).");
         var httpsOption = GetOption<bool>("https");
         var attackCmd = new Command("attack", "Initiates a flooding attack.");
         attackCmd.AddAlias("atk");
@@ -34,11 +35,12 @@ internal class AttackCommand : PhisherCommand
         attackCmd.AddOption(attackDataOption);
         attackCmd.AddOption(logLvlOption);
         attackCmd.AddOption(pauseOption);
-        attackCmd.SetHandler(AttackCommandHandler, attackNameArg, timeoutOption, threadsOption, httpsOption, attackDataOption, logLvlOption, pauseOption);
+        attackCmd.AddOption(rateLimitOption);
+        attackCmd.SetHandler(AttackCommandHandler, attackNameArg, timeoutOption, threadsOption, httpsOption, attackDataOption, logLvlOption, pauseOption, rateLimitOption);
         return attackCmd;
     }
 
-    private static Task AttackCommandHandler(string attackName, int timeout, int threads, bool https, AttackData attackData, LogLevel logLvl, int pause)
+    private static Task AttackCommandHandler(string attackName, int timeout, int threads, bool https, AttackData attackData, LogLevel logLvl, int pause, int rateLimit)
     {
         if (!KnownAttacks.TryGetValue(attackName, out var attackType) || attackType.New<Attack>() is not { } attack)
         {
@@ -48,7 +50,7 @@ internal class AttackCommand : PhisherCommand
         attack.Timeout = timeout;
 
         CancellationTokenSource cts = new();
-        var attackThreads = CreateAttackThreads(attack, threads, attackData, cts.Token, pause).ToArray();
+        var attackThreads = CreateAttackThreads(attack, threads, attackData, cts.Token, pause, rateLimit).ToArray();
         Console.CancelKeyPress += (_, __) =>
         {
             Console.WriteLine("Stopping...");
@@ -59,24 +61,24 @@ internal class AttackCommand : PhisherCommand
         return Task.WhenAll(attackThreads.Select(p => p.Task).Append(RefreshThread(attackThreads, logLvl)));
     }
 
-    private static IEnumerable<AttackThread> CreateAttackThreads(Attack attack, int count, AttackData data, CancellationToken cancellationToken, int pause)
+    private static IEnumerable<AttackThread> CreateAttackThreads(Attack attack, int count, AttackData data, CancellationToken cancellationToken, int pause, int rateLimit)
     {
         var c = count;
         while (c > 0)
         {
             var counter = new Status() { Name = $"{attack.GetType().Name}-{(count - c).ToString(new string('0', count.ToString().Length))}" };
-            yield return new(Spam(counter, attack, data, cancellationToken, pause), counter);
+            yield return new(Spam(counter, attack, data, cancellationToken, pause, rateLimit), counter);
             c--;
         }
     }
 
-    private static async Task Spam(Status counter, Attack attack, AttackData data, CancellationToken cancellationToken, int pause)
+    private static async Task Spam(Status counter, Attack attack, AttackData data, CancellationToken cancellationToken, int pause, int rateLimit)
     {
         while (keepRunning)
         {
             try
             {
-                await RunAttack(attack, counter, data, cancellationToken);
+                await RunAttack(attack, counter, data, cancellationToken, rateLimit);
                 if (pause > 0) await Task.Delay(pause);
             }
             catch (Exception ex)
@@ -87,7 +89,7 @@ internal class AttackCommand : PhisherCommand
         }
     }
 
-    private static async Task RunAttack(Attack attack, Status counter, AttackData data, CancellationToken cancellationToken)
+    private static async Task RunAttack(Attack attack, Status counter, AttackData data, CancellationToken cancellationToken, int rateLimit)
     {
         using AttackContext context = new(Map(data));
         context.SwitchServer(attack.Server, attack);
@@ -99,19 +101,19 @@ internal class AttackCommand : PhisherCommand
             context.LastResponse = await context.Client!.SendAsync(request, cancellationToken).ConfigureAwait(false);
             if (!keepRunning || context.CheckResponse()) break;
         }
-        UpdateStatistics(context, counter);
+        UpdateStatistics(context, counter, rateLimit);
     }
 
-    private static void UpdateStatistics(IAttackContext context, Status counter)
+    private static void UpdateStatistics(IAttackContext context, Status counter, int rateLimit)
     {
         if (!context.Failed)
         {
             counter.Success();
         }
-        else if (context.LastResponse?.StatusCode is { } c && specialFailureCases.TryGetValue(c, out var specialCase))
+        else if (context.LastResponse?.StatusCode is { } c && (specialFailureCases.TryGetValue(c, out var specialCase) || rateLimit > 0))
         {
-            counter.Failure(specialCase.Message);
-            Thread.Sleep(specialCase.Delay);
+            counter.Failure(string.Format(specialCase.Message, rateLimit));
+            Thread.Sleep(rateLimit > 0 ? rateLimit * 1000 : specialCase.Delay);
         }
         else
         {
