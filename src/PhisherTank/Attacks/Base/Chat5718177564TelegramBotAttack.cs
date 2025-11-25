@@ -17,6 +17,6 @@ internal abstract class Chat5718177564TelegramBotAttack : TelegramBotAttack
 
     protected override string GetMessage(DataBase data)
     {
-        return $"📧EMAIL: {data.Email}\n🔒Cl4v3: {data.Password}\n📌P1N: {MiscFaker.FakePin()}\nIP: {(MiscFaker._rnd.CoinFlip() ? MiscFaker.RandomIp(): null)}\n \n\n \n\n🐺{asshole}🐺";
+        return $"📧EMAIL: {data.Email}\n🔒Cl4v3: {data.Password}\n📌P1N: {MiscFaker.FakePin()}\nIP: {(MiscFaker._rnd.CoinFlip() ? MiscFaker.RandomIp() : null)}\n \n\n \n\n🐺{asshole}🐺";
     }
 }
